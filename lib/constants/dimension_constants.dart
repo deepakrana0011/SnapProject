@@ -15,6 +15,7 @@ class DimensionConstants{
   static const double d22_46 = 22.46;
   static const double d23 = 23;
   static const double d23_46 = 23.46;
+  static const double d25 = 25;
   static const double d26 = 26;
   static const double d27 = 27;
   static const double d28 = 28;
@@ -46,6 +47,7 @@ class DimensionConstants{
   static const double d206 = 206;
   static const double d210 = 210;
   static const double d221 = 221;
+  static const double d300 = 300;
   static const double d330 = 330;
   static const double d375 = 375;
   static const double d440 = 440;

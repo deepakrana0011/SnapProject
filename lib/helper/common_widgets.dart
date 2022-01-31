@@ -36,7 +36,7 @@ class CommonWidgets{
     );
   }
 
- static PreferredSizeWidget appBar(BuildContext context, String title, {double prefixWidth = DimensionConstants.d20, bool prefix = false, String? prefixImgPath, bool suffix = false, String? suffixImgPath}){
+ static PreferredSizeWidget appBar(BuildContext context, String title, {double prefixWidth = DimensionConstants.d20, bool prefix = false, String? prefixImgPath, bool suffix = false, String? suffixImgPath, VoidCallback? suffixTap}){
     return AppBar(
       centerTitle: true,
       elevation: 0,
@@ -46,6 +46,7 @@ class CommonWidgets{
           SizedBox(width: prefixWidth.w),
           GestureDetector(
               onTap: (){
+                CommonWidgets.hideKeyboard(context);
                 Navigator.of(context).pop();
               },
               child: prefix == true ? ImageView(path: prefixImgPath) :  const ImageView(path: ImageConstants.backArrow)),
@@ -55,7 +56,9 @@ class CommonWidgets{
       actions: [
         Row(
           children: [
-            suffix == true ? ImageView(path: suffixImgPath) : Container(),
+            suffix == true ? GestureDetector(
+              onTap: suffixTap,
+                child: ImageView(path: suffixImgPath)) : Container(),
             SizedBox(width: DimensionConstants.d20.w),
           ],
         )

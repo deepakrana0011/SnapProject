@@ -20,6 +20,7 @@ class NoteScreen extends StatelessWidget {
         CommonWidgets.hideKeyboard(context);
       },
       child: Scaffold(
+       // resizeToAvoidBottomInset: false,
         backgroundColor: ColorConstants.backgroundColor,
         appBar: CommonWidgets.appBar(context, "note".tr()),
         body: Form(
