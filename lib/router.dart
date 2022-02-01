@@ -8,6 +8,7 @@ import 'package:snap_app/view/note_screen.dart';
 import 'package:snap_app/view/otp_verify_page.dart';
 import 'package:snap_app/view/photo_screen.dart';
 import 'package:snap_app/view/signup_page.dart';
+import 'package:snap_app/view/voice_screen.dart';
 
 class OnGenerateRouter {
 
@@ -37,6 +38,10 @@ class OnGenerateRouter {
       case RouteConstants.photoScreen:
         return MaterialPageRoute(
             builder: (_) => PhotoScreen(image: settings.arguments as File,), settings: settings);
+
+      case RouteConstants.voiceScreen:
+        return MaterialPageRoute(
+            builder: (_) => VoiceScreen(), settings: settings);
 
       default:
         return _onPageNotFound();

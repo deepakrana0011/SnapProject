@@ -1,8 +1,9 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/extensions/all_extensions.dart';
 
-class DialogHelepr {
+class DialogHelper {
   static final border = RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(30),
   );
@@ -90,5 +91,13 @@ class DialogHelepr {
         );
       },
     );
+  }
+
+  static showMessage(BuildContext context, String message) {
+    Flushbar(
+      message: message,
+      backgroundColor: ColorConstants.primaryColor,
+      duration: const Duration(seconds: 2),
+    ).show(context);
   }
 }

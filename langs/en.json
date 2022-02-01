@@ -21,5 +21,9 @@
   "choose_from": "Choose From",
   "phone_gallery": "Phone Gallery",
   "camera": "Camera",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "email_required": "Email is required",
+  "invalid_email": "Invalid Email",
+  "internet_connection" : "Poor Internet Connection, please try again.",
+  "no_account_found" : "Sorry, no account found, please Sign Up first."
 }

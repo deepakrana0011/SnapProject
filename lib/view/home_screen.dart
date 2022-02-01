@@ -83,7 +83,11 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           cardView("document".tr(), ColorConstants.colorGreenDown, DimensionConstants.d32.h, DimensionConstants.d73.w),
                           SizedBox(width: DimensionConstants.d15.w),
-                          cardView("voice".tr(), ColorConstants.colorRedDown, DimensionConstants.d32.h, DimensionConstants.d74.w)
+                          GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, RouteConstants.voiceScreen);
+                              },
+                              child: cardView("voice".tr(), ColorConstants.colorRedDown, DimensionConstants.d32.h, DimensionConstants.d74.w))
                         ],
                       ),
                     ],
