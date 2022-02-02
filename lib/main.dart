@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/route_constants.dart';
+import 'package:snap_app/helper/shared_pref.dart';
 import 'package:snap_app/locator.dart';
 import 'router.dart' as router;
 
@@ -38,19 +39,20 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: () =>
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'snap'.tr(),
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        theme: ThemeData(
-          primarySwatch: color,
-        ),
-        onGenerateRoute: router.OnGenerateRouter.onGenerate,
-        initialRoute: RouteConstants.loginPage
-      ),
+      builder: () => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'snap'.tr(),
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          theme: ThemeData(
+            primarySwatch: color,
+          ),
+          onGenerateRoute: router.OnGenerateRouter.onGenerate,
+          initialRoute:
+              SharedPref.prefs?.getBool(SharedPref.isUserLogin) == null || SharedPref.prefs?.getBool(SharedPref.isUserLogin) == false
+                  ? RouteConstants.loginPage
+                  : RouteConstants.home),
     );
   }
 
@@ -67,4 +69,3 @@ class MyApp extends StatelessWidget {
     900: Color(0xFF8E97FD),
   });
 }
-

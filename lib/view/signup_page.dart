@@ -67,7 +67,7 @@ class SignUpPage extends StatelessWidget {
                                   provider.register(context, emailController.text).then((value) {
                                     if(value){
                                        emailController.clear();
-                                       Navigator.pushNamed(context, RouteConstants.otpVerify);
+                                      // Navigator.pushNamed(context, RouteConstants.otpVerify);
                                     }
                                   });
                                 }

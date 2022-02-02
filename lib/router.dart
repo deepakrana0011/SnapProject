@@ -25,7 +25,7 @@ class OnGenerateRouter {
 
       case RouteConstants.otpVerify:
         return MaterialPageRoute(
-            builder: (_) => OtpVerifyPage(), settings: settings);
+            builder: (_) => OtpVerifyPage(email: settings.arguments as String), settings: settings);
 
       case RouteConstants.home:
         return MaterialPageRoute(

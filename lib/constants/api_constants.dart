@@ -1,6 +1,8 @@
 class ApiConstants{
   // BASE URL~~~~~~~~~~
-  static const baseUrl = "http://18.130.225.164:8090/";
+  static const baseUrl = "http://18.130.225.164:8090/users/";
 
-  static const loginRegisterUrl = "users/register";
+  static const loginRegisterUrl = "register";
+  static const verifyOtp = "verifytoken";
+  static const resendOtp = "resendToken";
 }

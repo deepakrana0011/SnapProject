@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/enum/view_state.dart';
 import 'package:snap_app/helper/dialog_helper.dart';
+import 'package:snap_app/helper/shared_pref.dart';
 import 'package:snap_app/provider/base_provider.dart';
 import 'package:snap_app/service/fetch_data_exception.dart';
 
@@ -16,8 +17,9 @@ class LoginProvider extends BaseProvider{
     try {
     var model =  await api.login(email);
     if(model.data!.verifyStatus == 0){
-      Navigator.pushNamed(context, RouteConstants.otpVerify);
+      Navigator.pushNamed(context, RouteConstants.otpVerify, arguments: model.data!.email);
     } else if(model.data!.verifyStatus == 1){
+      SharedPref.prefs?.setBool(SharedPref.isUserLogin, true);
       Navigator.of(context)
           .pushNamedAndRemoveUntil(
           RouteConstants.home,

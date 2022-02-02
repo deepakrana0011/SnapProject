@@ -7,6 +7,8 @@ class SuccessResponse{
 
   SuccessResponse.fromJson(Map<String, dynamic> parsedJson){
     success = parsedJson['success'];
-    message = parsedJson['message'];
+    if(parsedJson['message'] != null){
+      message = parsedJson['message'];
+    }
   }
 }

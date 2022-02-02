@@ -49,7 +49,7 @@ class CommonWidgets{
                 CommonWidgets.hideKeyboard(context);
                 Navigator.of(context).pop();
               },
-              child: prefix == true ? ImageView(path: prefixImgPath) :  const ImageView(path: ImageConstants.backArrow)),
+              child: prefix == true ? Container() :  const ImageView(path: ImageConstants.backArrow)),
         ],
       ),
       title: Text(title).boldText(ColorConstants.colorBlackDown, DimensionConstants.d22.sp, TextAlign.center),

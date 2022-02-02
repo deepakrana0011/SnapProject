@@ -24,6 +24,8 @@
   "cancel": "Cancel",
   "email_required": "Email is required",
   "invalid_email": "Invalid Email",
-  "internet_connection" : "Poor Internet Connection, please try again.",
-  "no_account_found" : "Sorry, no account found, please Sign Up first."
+  "internet_connection" : "Network Problem, please try again.",
+  "no_account_found" : "Sorry, no account found, please Sign Up first.",
+  "otp_verifying" : "Otp Verifying.....",
+  "resend_otp" : "Resend OTP"
 }
