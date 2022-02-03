@@ -82,4 +82,22 @@ class Api{
       }
     }
   }
+
+  Future<SuccessResponse> sendNote(String email, String description, String token) async{
+    try {
+      var map = {"email": email, "description" : description};
+      dio.options.headers["authorization"] = token;
+      var response =
+      await dio.post(ApiConstants.baseUrl + ApiConstants.sendNote, data: map);
+      return SuccessResponse.fromJson(json.decode(response.toString()));
+    } on DioError catch (e) {
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        var errorMessage = errorData["error"];
+        throw FetchDataException(errorMessage);
+      } else {
+        throw const SocketException("");
+      }
+    }
+  }
 }

@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:snap_app/provider/home_provider.dart';
 import 'package:snap_app/provider/login_provider.dart';
+import 'package:snap_app/provider/note_provider.dart';
 import 'package:snap_app/provider/otp_verify_provider.dart';
 import 'package:snap_app/provider/photo_screen_provider.dart';
 import 'package:snap_app/provider/signup_provider.dart';
+import 'package:snap_app/provider/voice_provider.dart';
 import 'package:snap_app/service/api.dart';
 import 'package:snap_app/service/interceptor.dart';
 
@@ -17,6 +19,8 @@ void setupLocator(){
   locator.registerFactory<SignUpProvider>(() => SignUpProvider());
   locator.registerFactory<LoginProvider>(() => LoginProvider());
   locator.registerFactory<OtpVerifyProvider>(() => OtpVerifyProvider());
+  locator.registerFactory<NoteProvider>(() => NoteProvider());
+  locator.registerFactory<VoiceProvider>(() => VoiceProvider());
 
   locator.registerLazySingleton<Dio>(() {
     Dio dio =  Dio();

@@ -5,7 +5,11 @@ import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/decoration.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
 import 'package:snap_app/constants/route_constants.dart';
+import 'package:snap_app/constants/validations.dart';
+import 'package:snap_app/enum/view_state.dart';
 import 'package:snap_app/helper/common_widgets.dart';
+import 'package:snap_app/provider/note_provider.dart';
+import 'package:snap_app/view/base_view.dart';
 
 class NoteScreen extends StatelessWidget {
    NoteScreen({Key? key}) : super(key: key);
@@ -23,56 +27,70 @@ class NoteScreen extends StatelessWidget {
        // resizeToAvoidBottomInset: false,
         backgroundColor: ColorConstants.backgroundColor,
         appBar: CommonWidgets.appBar(context, "note".tr()),
-        body: Form(
-          key: _formKey,
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            margin: EdgeInsets.only(top: DimensionConstants.d36.h),
-            padding: EdgeInsets.only(top: DimensionConstants.d73.h),
-            decoration: BoxDecoration(
-              color: ColorConstants.colorWhite,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(DimensionConstants.d44.r),
-                topLeft: Radius.circular(DimensionConstants.d44.r),
-              ),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                //  mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                 // SizedBox(height: DimensionConstants.d73.h),
-                  CommonWidgets.goodMorningText(),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(DimensionConstants.d20.w, DimensionConstants.d55.h, DimensionConstants.d20.w, 0.0),
-                    child: Column(
-                      children: [
-                        emailTextField(),
-                        SizedBox(height: DimensionConstants.d20.h),
-                        descriptionTextField(),
-                        SizedBox(height: DimensionConstants.d38.h),
-                        GestureDetector(
-                          onTap: (){
-                        //    Navigator.pushNamed(context, RouteConstants.otpVerify);
-                          },
-                          child:  CommonWidgets.commonBtn(context, "next".tr(), DimensionConstants.d63.h, DimensionConstants.d330.w),
-                        )
-                      ],
-                    ),
+        body: BaseView<NoteProvider>(
+          onModelReady: (provider){
+          },
+          builder: (context, provider, _){
+            return Form(
+              key: _formKey,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                margin: EdgeInsets.only(top: DimensionConstants.d36.h),
+                padding: EdgeInsets.only(top: DimensionConstants.d73.h),
+                decoration: BoxDecoration(
+                  color: ColorConstants.colorWhite,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(DimensionConstants.d44.r),
+                    topLeft: Radius.circular(DimensionConstants.d44.r),
                   ),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    //  mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // SizedBox(height: DimensionConstants.d73.h),
+                      CommonWidgets.goodMorningText(),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(DimensionConstants.d20.w, DimensionConstants.d55.h, DimensionConstants.d20.w, 0.0),
+                        child: Column(
+                          children: [
+                            emailTextField(),
+                            SizedBox(height: DimensionConstants.d20.h),
+                            descriptionTextField(),
+                            SizedBox(height: DimensionConstants.d38.h),
+                            provider.state == ViewState.busy
+                                ? const CircularProgressIndicator(): GestureDetector(
+                              onTap: (){
+                                CommonWidgets.hideKeyboard(context);
+                                if(_formKey.currentState!.validate()){
+                                  provider.sendNote(context, emailController.text, descriptionController.text).then((value) {
+                                    if(value){
+                                      descriptionController.clear();
+                                    }
+                                  });
+                                }
+                              },
+                              child:  CommonWidgets.commonBtn(context, "next".tr(), DimensionConstants.d63.h, DimensionConstants.d330.w),
+                            )
+                          ],
+                        ),
+                      ),
 
-                ],
-              ),
-            ),),
-        ),
+                    ],
+                  ),
+                ),),
+            );
+          },
+        )
       ),
     );
   }
 
    Widget emailTextField(){
      return SizedBox(
-       height: DimensionConstants.d63.h,
+      // height: DimensionConstants.d63.h,
        child: TextFormField(
          controller: emailController,
          style: ViewDecoration.textFieldStyle(
@@ -82,14 +100,14 @@ class NoteScreen extends StatelessWidget {
          textInputAction: TextInputAction.done,
          keyboardType: TextInputType.emailAddress,
          validator: (value) {
-           // if (value!.trim().isEmpty) {
-           //   return "email_required".tr();
-           // } else if (!Validations.emailValidation(
-           //     value.trim())) {
-           //   return "invalid_email".tr();
-           // } else {
-           //   return null;
-           // }
+           if (value!.trim().isEmpty) {
+             return "email_required".tr();
+           } else if (!Validations.emailValidation(
+               value.trim())) {
+             return "invalid_email".tr();
+           } else {
+             return null;
+           }
          },
        ),
      );
@@ -109,6 +127,11 @@ class NoteScreen extends StatelessWidget {
          keyboardType: TextInputType.multiline,
          maxLines: 10,
          validator: (value) {
+           if(value!.trim().isEmpty){
+             return "description_empty".tr();
+           } else{
+             return null;
+           }
          },
        ),
      );

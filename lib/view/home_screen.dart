@@ -7,6 +7,7 @@ import 'package:snap_app/constants/image_constants.dart';
 import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/extensions/all_extensions.dart';
 import 'package:snap_app/helper/common_widgets.dart';
+import 'package:snap_app/helper/shared_pref.dart';
 import 'package:snap_app/provider/home_provider.dart';
 import 'package:snap_app/view/base_view.dart';
 import 'package:snap_app/widgets/image_picker_dialog.dart';
@@ -20,7 +21,11 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: ColorConstants.backgroundColor,
-      appBar: CommonWidgets.appBar(context, "home".tr(), suffix: true, suffixImgPath: ImageConstants.homeRefresh, prefix: true),
+      appBar: CommonWidgets.appBar(context, "home".tr(), suffix: true, suffixImgPath: ImageConstants.homeRefresh, prefix: true, suffixTap: (){
+        SharedPref.clearSharePref();
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteConstants.loginPage, (route) => false);
+      }),
       body: BaseView<HomeProvider>(
         builder: (context, provider, _){
           return  Container(
@@ -54,8 +59,8 @@ class HomeScreen extends StatelessWidget {
                           SizedBox(width: DimensionConstants.d15.w),
                           GestureDetector(
                               onTap: () async {
-                                // var value = await provider.permissionCheck();
-                                // if(value){
+                                var value = await provider.permissionCheck();
+                                if(value){
                                 showDialog(
                                     barrierDismissible: false,
                                     context: context,
@@ -73,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                                             Navigator.of(context).pop();
                                           },
                                         ));
-                                // }
+                                 }
                               },
                               child: cardView("photo".tr(), ColorConstants.colorYellowDown,DimensionConstants.d22.h, DimensionConstants.d72.w))
                         ],

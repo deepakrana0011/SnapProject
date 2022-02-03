@@ -1,6 +1,7 @@
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:snap_app/constants/color_constants.dart';
@@ -36,7 +37,8 @@ class CommonWidgets{
     );
   }
 
- static PreferredSizeWidget appBar(BuildContext context, String title, {double prefixWidth = DimensionConstants.d20, bool prefix = false, String? prefixImgPath, bool suffix = false, String? suffixImgPath, VoidCallback? suffixTap}){
+
+ static PreferredSizeWidget appBar(BuildContext context, String title, {double prefixWidth = DimensionConstants.d20, bool prefix = false, String? prefixImgPath, bool suffix = false, String? suffixImgPath, VoidCallback? suffixTap, Widget? colorPicker}){
     return AppBar(
       centerTitle: true,
       elevation: 0,
@@ -56,6 +58,8 @@ class CommonWidgets{
       actions: [
         Row(
           children: [
+           colorPicker ?? Container(),
+            SizedBox(width: DimensionConstants.d20.w),
             suffix == true ? GestureDetector(
               onTap: suffixTap,
                 child: ImageView(path: suffixImgPath)) : Container(),

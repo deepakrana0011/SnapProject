@@ -5,4 +5,5 @@ class ApiConstants{
   static const loginRegisterUrl = "register";
   static const verifyOtp = "verifytoken";
   static const resendOtp = "resendToken";
+  static const sendNote = "senddata";
 }

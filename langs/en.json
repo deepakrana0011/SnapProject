@@ -27,5 +27,8 @@
   "internet_connection" : "Network Problem, please try again.",
   "no_account_found" : "Sorry, no account found, please Sign Up first.",
   "otp_verifying" : "Otp Verifying.....",
-  "resend_otp" : "Resend OTP"
+  "resend_otp" : "Resend OTP",
+  "description_empty" : "Sorry, Description can't be empty.",
+  "something_went_wrong" : "OOPS! something went wrong, please try again.",
+  "hey_snap" : "Hey Snap!  Note send Successfully."
 }
