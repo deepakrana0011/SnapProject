@@ -16,7 +16,7 @@ class RegisterResponse extends SuccessResponse {
 class Data {
   String? id;
   String? email;
-  int? verifyToken;
+  String? verifyToken;
   int? verifyStatus;
 
   Data.fromJson(Map<String, dynamic> parsedJson) {

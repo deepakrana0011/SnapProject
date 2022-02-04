@@ -51,10 +51,11 @@ class MyApp extends StatelessWidget {
             primarySwatch: color,
           ),
           onGenerateRoute: router.OnGenerateRouter.onGenerate,
-          initialRoute:
-              SharedPref.prefs?.getBool(SharedPref.isUserLogin) == null || SharedPref.prefs?.getBool(SharedPref.isUserLogin) == false
-                  ? RouteConstants.loginPage
-                  : RouteConstants.home),
+          initialRoute: RouteConstants.loginPage
+              // SharedPref.prefs?.getBool(SharedPref.isUserLogin) == null || SharedPref.prefs?.getBool(SharedPref.isUserLogin) == false
+              //     ? RouteConstants.loginPage
+              //     : RouteConstants.home
+      ),
     );
   }
 

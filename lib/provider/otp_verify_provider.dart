@@ -31,8 +31,8 @@ class OtpVerifyProvider extends BaseProvider{
       var model =  await api.verifyOtp(email, otp);
       if(model.success == true){
         otpCorrect = true;
-        SharedPref.prefs?.setBool(SharedPref.isUserLogin, true);
-        SharedPref.prefs?.setString(SharedPref.userEmail, email) ?? "";
+      //  SharedPref.prefs?.setBool(SharedPref.isUserLogin, true);
+      //  SharedPref.prefs?.setString(SharedPref.userEmail, email) ?? "";
         Navigator.of(context)
             .pushNamedAndRemoveUntil(
             RouteConstants.home,

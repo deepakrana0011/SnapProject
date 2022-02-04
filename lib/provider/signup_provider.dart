@@ -18,12 +18,12 @@ class SignUpProvider extends BaseProvider{
     try {
      var model =  await api.register(email);
      if(model.data.verifyStatus == 0){
-       SharedPref.prefs?.setString(SharedPref.userEmail, email) ?? "";
+     //  SharedPref.prefs?.setString(SharedPref.userEmail, email) ?? "";
        SharedPref.prefs?.setString(SharedPref.token, model.jwtToken) ?? "";
        Navigator.pushNamed(context, RouteConstants.otpVerify, arguments: model.data.email);
      } else if(model.data.verifyStatus == 1){
-       SharedPref.prefs?.setBool(SharedPref.isUserLogin, true);
-       SharedPref.prefs?.setString(SharedPref.userEmail, email) ?? "";
+     //  SharedPref.prefs?.setBool(SharedPref.isUserLogin, true);
+    //   SharedPref.prefs?.setString(SharedPref.userEmail, email) ?? "";
        SharedPref.prefs?.setString(SharedPref.token, model.jwtToken) ?? "";
        Navigator.of(context)
            .pushNamedAndRemoveUntil(

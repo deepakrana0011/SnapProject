@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/helper/common_widgets.dart';
+import 'package:snap_app/helper/dialog_helper.dart';
 import 'package:snap_app/provider/base_provider.dart';
 
 class HomeProvider extends BaseProvider{
@@ -49,7 +51,11 @@ class HomeProvider extends BaseProvider{
       final pickedFile = await picker.pickImage(source: ImageSource.camera, imageQuality: 90, maxHeight: 720);
       if (pickedFile != null) {
         image = File(pickedFile.path);
-        Navigator.pushNamed(context, RouteConstants.photoScreen, arguments: image);
+        Navigator.pushNamed(context, RouteConstants.photoScreen, arguments: image).then((value) {
+          if(value == true){
+            DialogHelper.showMessage(context, "image_sent_successfully".tr());
+          }
+        });
       } else {
         print('No image selected.');
         return;
@@ -60,7 +66,11 @@ class HomeProvider extends BaseProvider{
       //  image = File(pickedFile!.path);
       if (pickedFile != null) {
         image = File(pickedFile.path);
-        Navigator.pushNamed(context, RouteConstants.photoScreen, arguments: image);
+        Navigator.pushNamed(context, RouteConstants.photoScreen, arguments: image).then((value) {
+          if(value == true){
+            DialogHelper.showMessage(context, "image_sent_successfully".tr());
+          }
+        });
       } else {
         print('No image selected.');
         return;

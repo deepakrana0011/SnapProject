@@ -100,4 +100,29 @@ class Api{
       }
     }
   }
+
+  Future<SuccessResponse> sendPhoto(String token, String email, File imageFile) async{
+    try {
+      var map = <String, dynamic>{"email": email};
+      if (imageFile != null) {
+        var image = MultipartFile.fromFileSync(imageFile.path, filename: "snap.png");
+        var imageMap = {
+          'image': image,
+        };
+        map.addAll(imageMap);
+      }
+      dio.options.headers["authorization"] = token;
+      var response =
+      await dio.post(ApiConstants.baseUrl + ApiConstants.sendPhoto, data: FormData.fromMap(map));
+      return SuccessResponse.fromJson(json.decode(response.toString()));
+    } on DioError catch (e) {
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        var errorMessage = errorData["error"];
+        throw FetchDataException(errorMessage);
+      } else {
+        throw const SocketException("");
+      }
+    }
+  }
 }

@@ -7,6 +7,8 @@
   "sign_up" : "SIGN UP",
   "signup" : "Signup",
   "good_morning_snap" : "Good Morning, Snap",
+  "good_afternoon_snap" : "Good Afternoon, Snap",
+  "good_evening_snap" : "Good Evening , Snap",
   "we_wish_you_have_a_good_day" : "We Wish you have a good day",
   "next" : "Next",
   "verify_otp" : "Verify OTP",
@@ -30,5 +32,7 @@
   "resend_otp" : "Resend OTP",
   "description_empty" : "Sorry, Description can't be empty.",
   "something_went_wrong" : "OOPS! something went wrong, please try again.",
-  "hey_snap" : "Hey Snap!  Note send Successfully."
+  "hey_snap" : "Hey Snap!  Note send Successfully.",
+  "something_went_wrong_image_error" : "OOPS! something went wrong, image error.",
+  "image_sent_successfully" : "Your image has been sent successfully"
 }

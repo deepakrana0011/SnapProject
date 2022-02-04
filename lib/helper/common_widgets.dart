@@ -76,7 +76,7 @@ class CommonWidgets{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("good_morning_snap".tr()).semiBoldText(ColorConstants.colorBlackDown, DimensionConstants.d26, TextAlign.left),
+          Text(greeting()).semiBoldText(ColorConstants.colorBlackDown, DimensionConstants.d26, TextAlign.left),
           Text("we_wish_you_have_a_good_day".tr()).regularText(ColorConstants.colorGrayDown, DimensionConstants.d15, TextAlign.left)
         ],
       ),
@@ -99,5 +99,16 @@ class CommonWidgets{
             )
           ],
         ));
+  }
+
+  static String greeting() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'good_morning_snap'.tr();
+    }
+    if (hour < 16) {
+      return 'good_afternoon_snap'.tr();
+    }
+    return 'good_evening_snap'.tr();
   }
 }

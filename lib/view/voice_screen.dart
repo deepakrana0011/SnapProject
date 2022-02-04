@@ -16,6 +16,7 @@ import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform
 import 'package:snap_app/locator.dart';
 import 'package:snap_app/provider/voice_provider.dart';
 import 'package:snap_app/view/base_view.dart';
+import 'package:snap_app/widgets/voice_recorder.dart';
 
 
 class VoiceScreen extends StatelessWidget {
@@ -74,6 +75,7 @@ class VoiceScreen extends StatelessWidget {
                     children: [
                       // SizedBox(height: DimensionConstants.d73.h),
                       CommonWidgets.goodMorningText(),
+                //   MyHomePage(),
                       makeBody(),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -132,6 +134,8 @@ class VoiceScreen extends StatelessWidget {
     );
   }
 
+
+  // Below code is for voice recorder.
   static const theSource = AudioSource.microphone;
 
   Codec _codec = Codec.aacMP4;

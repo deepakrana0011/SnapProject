@@ -15,8 +15,10 @@ import 'package:snap_app/constants/dimension_constants.dart';
 import 'package:snap_app/constants/image_constants.dart';
 import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/constants/string_constants.dart';
+import 'package:snap_app/constants/validations.dart';
 import 'package:snap_app/enum/view_state.dart';
 import 'package:snap_app/helper/common_widgets.dart';
+import 'package:snap_app/helper/dialog_helper.dart';
 import 'package:snap_app/locator.dart';
 import 'package:snap_app/provider/photo_screen_provider.dart';
 import 'package:snap_app/view/base_view.dart';
@@ -41,8 +43,6 @@ class PhotoScreen extends StatelessWidget {
       y2Prev = 100.0;
   final GlobalKey stackKey = GlobalKey();
   Offset offset = Offset(100.0, 100.0);
-
-  AppBar? appBar;
 
   PhotoScreenProvider provider = locator<PhotoScreenProvider>();
 
@@ -113,14 +113,14 @@ class PhotoScreen extends StatelessWidget {
                                   child: GestureDetector(
                                       onPanUpdate: (details) {
                                         offset += details.delta;
-                                        provider.setState(ViewState.busy);
+                                        provider.updateText(true);
                                         if (offset.dx < -30 ||
                                             offset.dy < -55 ||
-                                            offset.dx > 260 ||
+                                            offset.dx > 280 ||
                                             offset.dy > 350) {
                                           imageTextController.clear();
                                           offset = const Offset(100.0, 100.0);
-                                          provider.setState(ViewState.busy);
+                                          provider.updateText(true);
                                         }
                                        // print(offset);
                                       },
@@ -166,9 +166,17 @@ class PhotoScreen extends StatelessWidget {
                             children: [
                               emailTextField(),
                               SizedBox(height: DimensionConstants.d20.h),
-                              GestureDetector(
-                                onTap: () {
-                                  _takeScreenShot();
+                              provider.state == ViewState.busy
+                                  ? const CircularProgressIndicator()
+                                  : GestureDetector(
+                                onTap: () async {
+                                  CommonWidgets.hideKeyboard(context);
+                                 if(_formKey.currentState!.validate()){
+                                 var imageFile =  await _takeScreenShot(context);
+                                   provider.sendPhoto(context, emailController.text, imageFile).then((value) {
+                                     emailController.clear();
+                                   });
+                                 }
                                 },
                                 child: CommonWidgets.commonBtn(
                                     context,
@@ -191,7 +199,7 @@ class PhotoScreen extends StatelessWidget {
 
   Widget emailTextField() {
     return SizedBox(
-      height: DimensionConstants.d63.h,
+    //  height: DimensionConstants.d63.h,
       child: TextFormField(
         controller: emailController,
         style: ViewDecoration.textFieldStyle(
@@ -203,29 +211,31 @@ class PhotoScreen extends StatelessWidget {
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.emailAddress,
         validator: (value) {
-          // if (value!.trim().isEmpty) {
-          //   return "email_required".tr();
-          // } else if (!Validations.emailValidation(
-          //     value.trim())) {
-          //   return "invalid_email".tr();
-          // } else {
-          //   return null;
-          // }
+          if (value!.trim().isEmpty) {
+            return "email_required".tr();
+          } else if (!Validations.emailValidation(
+              value.trim())) {
+            return "invalid_email".tr();
+          } else {
+            return null;
+          }
         },
       ),
     );
   }
 
-  void _takeScreenShot() async {
+   _takeScreenShot(BuildContext context) async {
     try {
       RenderRepaintBoundary? boundary = screenshotKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary?;
       final image = await boundary!.toImage(pixelRatio: 2.0); // image quality
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
-      saveFile(pngBytes);
+    //  saveFile(pngBytes);
+      final file = File(await getFilePath());
+     return await file.writeAsBytes(pngBytes);
     } catch (e) {
-      print(e);
+      DialogHelper.showMessage(context, "something_went_wrong_image_error".tr());
     }
   }
 
@@ -270,7 +280,7 @@ Widget colorPicker(BuildContext context){
       onTap: (){
         colorPickerAlert(context);
       },
-        child: ImageView(path: ImageConstants.homeSetting));
+        child: Icon(Icons.color_lens_outlined, color: ColorConstants.colorBlackDown));
 }
 
 

@@ -67,6 +67,7 @@ class NoteScreen extends StatelessWidget {
                                 if(_formKey.currentState!.validate()){
                                   provider.sendNote(context, emailController.text, descriptionController.text).then((value) {
                                     if(value){
+                                      emailController.clear();
                                       descriptionController.clear();
                                     }
                                   });
@@ -118,6 +119,7 @@ class NoteScreen extends StatelessWidget {
      return SizedBox(
        height: DimensionConstants.d163.h,
        child: TextFormField(
+         textCapitalization: TextCapitalization.sentences,
          controller: descriptionController,
          style: ViewDecoration.textFieldStyle(
              DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
