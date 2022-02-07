@@ -34,5 +34,6 @@
   "something_went_wrong" : "OOPS! something went wrong, please try again.",
   "hey_snap" : "Hey Snap!  Note send Successfully.",
   "something_went_wrong_image_error" : "OOPS! something went wrong, image error.",
-  "image_sent_successfully" : "Your image has been sent successfully"
+  "image_sent_successfully" : "Your image has been sent successfully",
+  "choose_a_document" : "Choose a document"
 }

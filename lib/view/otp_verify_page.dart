@@ -24,6 +24,14 @@ class OtpVerifyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(375, 812),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return GestureDetector(
       onTap: (){
         CommonWidgets.hideKeyboard(context);

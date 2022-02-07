@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:audio_session/audio_session.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +16,11 @@ import 'package:snap_app/constants/dimension_constants.dart';
 import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/helper/common_widgets.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
+import 'package:snap_app/helper/dialog_helper.dart';
 import 'package:snap_app/locator.dart';
 import 'package:snap_app/provider/voice_provider.dart';
 import 'package:snap_app/view/base_view.dart';
-import 'package:snap_app/widgets/voice_recorder.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 
 class VoiceScreen extends StatelessWidget {
   VoiceScreen({Key? key}) : super(key: key);
@@ -25,85 +28,155 @@ class VoiceScreen extends StatelessWidget {
   final descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   VoiceProvider voiceProvider = locator<VoiceProvider>();
+  String _timerText = '00:00:00';
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(375, 812),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return GestureDetector(
       onTap: () {
         CommonWidgets.hideKeyboard(context);
       },
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
-        backgroundColor: ColorConstants.backgroundColor,
-        appBar: CommonWidgets.appBar(context, "voice".tr()),
-        body: BaseView<VoiceProvider>(
-          onModelReady: (provider){
-            voiceProvider = provider;
-            _mPlayer!.openPlayer().then((value) {
-
-              _mPlayerIsInited = true;
-             provider.updateRecord(true);
-            });
-
-            openTheRecorder().then((value) {
+          // resizeToAvoidBottomInset: false,
+          backgroundColor: ColorConstants.backgroundColor,
+          appBar: CommonWidgets.appBar(context, "voice".tr()),
+          body: BaseView<VoiceProvider>(
+            onModelReady: (provider)  {
+              voiceProvider = provider;
+              _mPlayer!.openPlayer().then((value) {
+                _mPlayerIsInited = true;
+                provider.updateRecord(true);
+              });
+              openTheRecorder().then((value) {
                 _mRecorderIsInited = true;
                 provider.updateRecord(true);
-            });
-          },
-          builder: (context, provider, _){
-            return  Form(
-              key: _formKey,
-              child: Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
-                width: double.infinity,
-                margin: EdgeInsets.only(top: DimensionConstants.d36.h),
-                padding: EdgeInsets.only(top: DimensionConstants.d73.h),
-                decoration: BoxDecoration(
-                  color: ColorConstants.colorWhite,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(DimensionConstants.d44.r),
-                    topLeft: Radius.circular(DimensionConstants.d44.r),
+              });
+            },
+            builder: (context, provider, _) {
+              return Form(
+                key: _formKey,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: DimensionConstants.d36.h),
+                  padding: EdgeInsets.only(top: DimensionConstants.d73.h),
+                  decoration: BoxDecoration(
+                    color: ColorConstants.colorWhite,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(DimensionConstants.d44.r),
+                      topLeft: Radius.circular(DimensionConstants.d44.r),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      //  mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // SizedBox(height: DimensionConstants.d73.h),
+                        CommonWidgets.goodMorningText(),
+                       // makeBody(),
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Container(
+                                child: Center(
+                                  child: Text(
+                                    _timerText,
+                                    style: TextStyle(
+                                        fontSize: 50, color: Colors.red),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  CommonWidgets.createElevatedButton(
+                                    icon: Icons.mic,
+                                    iconColor: Colors.red,
+                                    onPressFunc:  _mRecorder!.isStopped ? record : (){
+                                      DialogHelper.showMessage(context, "Recording in going on");
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: 30,
+                                  ),
+                                  CommonWidgets.createElevatedButton(
+                                    icon: Icons.stop,
+                                    iconColor: Colors.red,
+                                    onPressFunc: _mRecorder!.isStopped ? (){
+                                      //DialogHelper.showMessage(context, "Recording stop");
+                                    } : stopRecorder,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 9.0, primary: Colors.red),
+                                onPressed: getPlaybackFn(),
+                                icon:  Icon(
+                                  _mPlayer!.isPlaying
+                                      ? Icons.stop : Icons.play_arrow
+                                ),
+                                label: Text(
+                                  _mPlayer!.isPlaying
+                                      ? "Stop" :  "Play",
+                                        style: TextStyle(
+                                          fontSize: 28,
+                                        ),
+                                      )
+                              ),
+
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              DimensionConstants.d20.w,
+                              DimensionConstants.d55.h,
+                              DimensionConstants.d20.w,
+                              0.0),
+                          child: Column(
+                            children: [
+                              emailTextField(),
+                              SizedBox(height: DimensionConstants.d21.h),
+                              GestureDetector(
+                                onTap: () {
+                                  //    Navigator.pushNamed(context, RouteConstants.otpVerify);
+                                },
+                                child: CommonWidgets.commonBtn(
+                                    context,
+                                    "next".tr(),
+                                    DimensionConstants.d63.h,
+                                    DimensionConstants.d330.w),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    //  mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // SizedBox(height: DimensionConstants.d73.h),
-                      CommonWidgets.goodMorningText(),
-                //   MyHomePage(),
-                      makeBody(),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            DimensionConstants.d20.w, DimensionConstants.d55.h,
-                            DimensionConstants.d20.w, 0.0),
-                        child: Column(
-                          children: [
-                            emailTextField(),
-                            SizedBox(height: DimensionConstants.d21.h),
-                            GestureDetector(
-                              onTap: () {
-                                //    Navigator.pushNamed(context, RouteConstants.otpVerify);
-                              },
-                              child: CommonWidgets.commonBtn(context, "next".tr(),
-                                  DimensionConstants.d63.h,
-                                  DimensionConstants.d330.w),
-                            )
-                          ],
-                        ),
-                      ),
-
-                    ],
-                  ),
-                ),),
-            );
-          },
-        )
-      ),
+              );
+            },
+          )),
     );
   }
 
@@ -115,9 +188,9 @@ class VoiceScreen extends StatelessWidget {
         style: ViewDecoration.textFieldStyle(
             DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
         decoration: ViewDecoration.inputDecorationForEmailTextField(
-            "email_address".tr(), EdgeInsets.fromLTRB(
-            DimensionConstants.d23.w, DimensionConstants.d26.h, 0.0,
-            DimensionConstants.d19.h)),
+            "email_address".tr(),
+            EdgeInsets.fromLTRB(DimensionConstants.d23.w,
+                DimensionConstants.d26.h, 0.0, DimensionConstants.d19.h)),
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.emailAddress,
         validator: (value) {
@@ -134,7 +207,6 @@ class VoiceScreen extends StatelessWidget {
     );
   }
 
-
   // Below code is for voice recorder.
   static const theSource = AudioSource.microphone;
 
@@ -145,7 +217,15 @@ class VoiceScreen extends StatelessWidget {
   bool _mPlayerIsInited = false;
   var _mRecorderIsInited = false;
   bool _mplaybackReady = false;
+  StreamSubscription? _recorderSubscription;
 
+  Future<void> _initializeExample() async {
+    await _mPlayer?.closePlayer();
+    await _mPlayer?.openPlayer();
+    await _mPlayer?.setSubscriptionDuration(Duration(milliseconds: 10));
+    await _mRecorder?.setSubscriptionDuration(Duration(milliseconds: 10));
+    await initializeDateFormatting();
+  }
 
   Future<void> openTheRecorder() async {
     if (!kIsWeb) {
@@ -163,15 +243,16 @@ class VoiceScreen extends StatelessWidget {
         return;
       }
     }
+    await _initializeExample();
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
       avAudioSessionCategoryOptions:
-      AVAudioSessionCategoryOptions.allowBluetooth |
-      AVAudioSessionCategoryOptions.defaultToSpeaker,
+          AVAudioSessionCategoryOptions.allowBluetooth |
+              AVAudioSessionCategoryOptions.defaultToSpeaker,
       avAudioSessionMode: AVAudioSessionMode.spokenAudio,
       avAudioSessionRouteSharingPolicy:
-      AVAudioSessionRouteSharingPolicy.defaultPolicy,
+          AVAudioSessionRouteSharingPolicy.defaultPolicy,
       avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
       androidAudioAttributes: const AndroidAudioAttributes(
         contentType: AndroidAudioContentType.speech,
@@ -185,25 +266,40 @@ class VoiceScreen extends StatelessWidget {
     _mRecorderIsInited = true;
   }
 
-
   void record() {
-    _mRecorder!
+   _mRecorder!
         .startRecorder(
       toFile: _mPath,
       codec: _codec,
       audioSource: theSource,
-    )
-        .then((value) {
+    ).then((value) {
       voiceProvider.updateRecord(true);
     });
+   _recorderSubscription = _mRecorder!.onProgress!.listen((e) {
+     var date = DateTime.fromMillisecondsSinceEpoch(
+         e.duration.inMilliseconds,
+         isUtc: true);
+     var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
+
+        _timerText = txt.substring(0, 8);
+        voiceProvider.updateRecord(true);
+    });
+   // _recorderSubscription!.cancel();
+  }
+
+  void cancelRecorderSubscriptions() {
+    if (_recorderSubscription != null) {
+      _recorderSubscription!.cancel();
+      _recorderSubscription = null;
+    }
   }
 
   void stopRecorder() async {
     await _mRecorder!.stopRecorder().then((value) {
-
-        //var url = value;
-        _mplaybackReady = true;
-     voiceProvider.updateRecord(true);
+      //var url = value;
+      _mplaybackReady = true;
+      cancelRecorderSubscriptions();
+      voiceProvider.updateRecord(true);
     });
   }
 
@@ -214,11 +310,11 @@ class VoiceScreen extends StatelessWidget {
         _mPlayer!.isStopped);
     _mPlayer!
         .startPlayer(
-        fromURI: _mPath,
-        //codec: kIsWeb ? Codec.opusWebM : Codec.aacADTS,
-        whenFinished: () {
-          voiceProvider.updateRecord(true);
-        })
+            fromURI: _mPath,
+            //codec: kIsWeb ? Codec.opusWebM : Codec.aacADTS,
+            whenFinished: () {
+              voiceProvider.updateRecord(true);
+            })
         .then((value) {
       voiceProvider.updateRecord(true);
     });

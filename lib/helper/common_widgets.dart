@@ -76,8 +76,8 @@ class CommonWidgets{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(greeting()).semiBoldText(ColorConstants.colorBlackDown, DimensionConstants.d26, TextAlign.left),
-          Text("we_wish_you_have_a_good_day".tr()).regularText(ColorConstants.colorGrayDown, DimensionConstants.d15, TextAlign.left)
+          Text(greeting()).semiBoldText(ColorConstants.colorBlackDown, DimensionConstants.d26.sp, TextAlign.left),
+          Text("we_wish_you_have_a_good_day".tr()).regularText(ColorConstants.colorGrayDown, DimensionConstants.d15.sp, TextAlign.left)
         ],
       ),
     );
@@ -111,4 +111,30 @@ class CommonWidgets{
     }
     return 'good_evening_snap'.tr();
   }
+
+ static ElevatedButton createElevatedButton(
+      {required IconData icon, required Color iconColor, required VoidCallback onPressFunc}) {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.all(6.0),
+        side: BorderSide(
+          color: Colors.red,
+          width: 4.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        primary: Colors.white,
+        elevation: 9.0,
+      ),
+      onPressed: onPressFunc,
+      icon: Icon(
+        icon,
+        color: iconColor,
+        size: 38.0,
+      ),
+      label: Text(''),
+    );
+  }
+
 }

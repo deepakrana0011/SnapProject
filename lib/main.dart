@@ -37,25 +37,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: () => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'snap'.tr(),
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
-          theme: ThemeData(
-            primarySwatch: color,
-          ),
-          onGenerateRoute: router.OnGenerateRouter.onGenerate,
-          initialRoute: RouteConstants.loginPage
-              // SharedPref.prefs?.getBool(SharedPref.isUserLogin) == null || SharedPref.prefs?.getBool(SharedPref.isUserLogin) == false
-              //     ? RouteConstants.loginPage
-              //     : RouteConstants.home
-      ),
+    return
+      // ScreenUtilInit(
+      //   designSize: const Size(375, 812),
+      //   minTextAdapt: true,
+      //   splitScreenMode: true,
+      //   builder: () =>
+            MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'snap'.tr(),
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            theme: ThemeData(
+              primarySwatch: color,
+            ),
+            onGenerateRoute: router.OnGenerateRouter.onGenerate,
+            initialRoute: RouteConstants.loginPage
+                // SharedPref.prefs?.getBool(SharedPref.isUserLogin) == null || SharedPref.prefs?.getBool(SharedPref.isUserLogin) == false
+                //     ? RouteConstants.loginPage
+                //     : RouteConstants.home
+       // ),
     );
   }
 

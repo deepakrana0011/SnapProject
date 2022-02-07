@@ -19,6 +19,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(375, 812),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: ColorConstants.backgroundColor,
@@ -89,14 +97,14 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: (){
-                              DialogHelper.showMessage(context, "OOPS, Under Development!");
+                            //  DialogHelper.showMessage(context, "OOPS, Under Development!");
+                              Navigator.pushNamed(context, RouteConstants.documentScreen);
                             },
                               child: cardView("document".tr(), ColorConstants.colorGreenDown, DimensionConstants.d32.h, DimensionConstants.d73.w)),
                           SizedBox(width: DimensionConstants.d15.w),
                           GestureDetector(
                               onTap: (){
-                              //  Navigator.pushNamed(context, RouteConstants.voiceScreen);
-                                DialogHelper.showMessage(context, "OOPS, Under Development!");
+                                Navigator.pushNamed(context, RouteConstants.voiceScreen);
                               },
                               child: cardView("voice".tr(), ColorConstants.colorRedDown, DimensionConstants.d32.h, DimensionConstants.d74.w))
                         ],
