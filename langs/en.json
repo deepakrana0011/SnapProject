@@ -35,5 +35,13 @@
   "hey_snap" : "Hey Snap!  Note send Successfully.",
   "something_went_wrong_image_error" : "OOPS! something went wrong, image error.",
   "image_sent_successfully" : "Your image has been sent successfully",
-  "choose_a_document" : "Choose a document"
+  "choose_a_document" : "Choose a document",
+  "file_size_exceeds" : "File size exceeds! You can send up to 20 MB",
+  "history" : "History",
+  "document_send_successfully" : "Your document has send Successfully.",
+  "microphone_permission_not_granted" : "Microphone permission not granted, please enable it to record audio.",
+  "microphone_permission" : "Microphone permission",
+  "storage_permission_not_granted" : "This app needs storage access to choose document to send, Please click again on storage permission whether already given",
+  "storage_permission" : "Storage Permission",
+  "email" : "Email"
 }

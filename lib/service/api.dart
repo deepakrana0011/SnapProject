@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:snap_app/constants/api_constants.dart';
 import 'package:snap_app/locator.dart';
 import 'package:http/http.dart' as http;
@@ -113,7 +114,32 @@ class Api{
       }
       dio.options.headers["authorization"] = token;
       var response =
-      await dio.post(ApiConstants.baseUrl + ApiConstants.sendPhoto, data: FormData.fromMap(map));
+      await dio.post(ApiConstants.baseUrl + ApiConstants.sendPhotoAndDocument, data: FormData.fromMap(map));
+      return SuccessResponse.fromJson(json.decode(response.toString()));
+    } on DioError catch (e) {
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        var errorMessage = errorData["error"];
+        throw FetchDataException(errorMessage);
+      } else {
+        throw const SocketException("");
+      }
+    }
+  }
+
+  Future<SuccessResponse> sendDocument(String token, String email, PlatformFile? documentFile) async{
+    try {
+      var map = <String, dynamic>{"email": email};
+      if (documentFile != null) {
+        var document = MultipartFile.fromFileSync(documentFile.path.toString(), filename: "snapDocument.${documentFile.extension}");
+        var documentMap = {
+          'image': document,
+        };
+        map.addAll(documentMap);
+      }
+      dio.options.headers["authorization"] = token;
+      var response =
+      await dio.post(ApiConstants.baseUrl + ApiConstants.sendPhotoAndDocument, data: FormData.fromMap(map));
       return SuccessResponse.fromJson(json.decode(response.toString()));
     } on DioError catch (e) {
       if (e.response != null) {

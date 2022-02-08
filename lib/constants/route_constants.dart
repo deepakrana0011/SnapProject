@@ -7,4 +7,5 @@ static const noteScreen = "noteScreen";
 static const photoScreen = "photoScreen";
 static const voiceScreen = "voiceScreen";
 static const documentScreen = "documentScreen";
+static const historyScreen = "historyScreen";
 }

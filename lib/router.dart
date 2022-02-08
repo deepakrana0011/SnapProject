@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/view/document_screen.dart';
+import 'package:snap_app/view/history_screen.dart';
 import 'package:snap_app/view/home_screen.dart';
 import 'package:snap_app/view/login_page.dart';
 import 'package:snap_app/view/note_screen.dart';
@@ -47,6 +48,11 @@ class OnGenerateRouter {
       case RouteConstants.documentScreen:
         return MaterialPageRoute(
             builder: (_) => DocumentScreen(), settings: settings);
+
+      case RouteConstants.historyScreen:
+        return MaterialPageRoute(
+            builder: (_) => HistoryScreen(), settings: settings);
+
 
       default:
         return _onPageNotFound();

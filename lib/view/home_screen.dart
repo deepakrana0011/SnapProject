@@ -31,9 +31,7 @@ class HomeScreen extends StatelessWidget {
       key: _scaffoldKey,
       backgroundColor: ColorConstants.backgroundColor,
       appBar: CommonWidgets.appBar(context, "home".tr(), suffix: true, suffixImgPath: ImageConstants.homeRefresh, prefix: true, suffixTap: (){
-        // SharedPref.clearSharePref();
-        // Navigator.of(context).pushNamedAndRemoveUntil(
-        //     RouteConstants.loginPage, (route) => false);
+        Navigator.pushNamed(context, RouteConstants.historyScreen);
       }),
       body: BaseView<HomeProvider>(
         builder: (context, provider, _){

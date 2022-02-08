@@ -4,8 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/decoration.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
+import 'package:snap_app/constants/validations.dart';
+import 'package:snap_app/enum/view_state.dart';
 import 'package:snap_app/extensions/all_extensions.dart';
 import 'package:snap_app/helper/common_widgets.dart';
+import 'package:snap_app/helper/dialog_helper.dart';
 import 'package:snap_app/provider/document_provider.dart';
 import 'package:snap_app/view/base_view.dart';
 
@@ -31,7 +34,7 @@ class DocumentScreen extends StatelessWidget {
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
           backgroundColor: ColorConstants.backgroundColor,
-          appBar: CommonWidgets.appBar(context, "voice".tr()),
+          appBar: CommonWidgets.appBar(context, "document".tr()),
           body: BaseView<DocumentProvider>(
             onModelReady: (provider)  {
             },
@@ -52,12 +55,10 @@ class DocumentScreen extends StatelessWidget {
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      //  mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // SizedBox(height: DimensionConstants.d73.h),
                         CommonWidgets.goodMorningText(),
-                        pickFile(),
+                        pickFile(context, provider),
                           SizedBox(height: DimensionConstants.d40.h),
                         Padding(
                           padding: EdgeInsets.fromLTRB(
@@ -69,9 +70,24 @@ class DocumentScreen extends StatelessWidget {
                             children: [
                               emailTextField(),
                               SizedBox(height: DimensionConstants.d21.h),
-                              GestureDetector(
+                              provider.state == ViewState.busy
+                                  ? const CircularProgressIndicator()
+                                  : GestureDetector(
                                 onTap: () {
-
+                                  if(_formKey.currentState!.validate()){
+                                    final kb = provider.file!.size / 1024;
+                                    final mb = kb / 1024;
+                                    if(mb > 20){
+                                      DialogHelper.showMessage(context, "file_size_exceeds".tr());
+                                    } else{
+                                      provider.sendDocument(context, emailController.text, provider.file).then((value) {
+                                        emailController.clear();
+                                        provider.filePath = "";
+                                        provider.file = null;
+                                        provider.updatePickFile(true);
+                                      });
+                                    }
+                                  }
                                 },
                                 child: CommonWidgets.commonBtn(
                                     context,
@@ -93,34 +109,31 @@ class DocumentScreen extends StatelessWidget {
   }
 
    Widget emailTextField() {
-     return SizedBox(
-       height: DimensionConstants.d63.h,
-       child: TextFormField(
-         controller: emailController,
-         style: ViewDecoration.textFieldStyle(
-             DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
-         decoration: ViewDecoration.inputDecorationForEmailTextField(
-             "email_address".tr(),
-             EdgeInsets.fromLTRB(DimensionConstants.d23.w,
-                 DimensionConstants.d26.h, 0.0, DimensionConstants.d19.h)),
-         textInputAction: TextInputAction.done,
-         keyboardType: TextInputType.emailAddress,
-         validator: (value) {
-           // if (value!.trim().isEmpty) {
-           //   return "email_required".tr();
-           // } else if (!Validations.emailValidation(
-           //     value.trim())) {
-           //   return "invalid_email".tr();
-           // } else {
-           //   return null;
-           // }
-         },
-       ),
+     return TextFormField(
+       controller: emailController,
+       style: ViewDecoration.textFieldStyle(
+           DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
+       decoration: ViewDecoration.inputDecorationForEmailTextField(
+           "email_address".tr(),
+           EdgeInsets.fromLTRB(DimensionConstants.d23.w,
+               DimensionConstants.d26.h, 0.0, DimensionConstants.d19.h)),
+       textInputAction: TextInputAction.done,
+       keyboardType: TextInputType.emailAddress,
+       validator: (value) {
+         if (value!.trim().isEmpty) {
+           return "email_required".tr();
+         } else if (!Validations.emailValidation(
+             value.trim())) {
+           return "invalid_email".tr();
+         } else {
+           return null;
+         }
+       },
      );
    }
 
 
-   Widget pickFile(){
+   Widget pickFile(BuildContext context, DocumentProvider provider){
     return Container(
       margin: EdgeInsets.fromLTRB(DimensionConstants.d20.w,  DimensionConstants.d40.h,  DimensionConstants.d20.w,  DimensionConstants.d25.h),
       child: Row(
@@ -129,7 +142,7 @@ class DocumentScreen extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: (){
-
+                provider.pickAFile(context);
               },
               child: Container(
                   decoration: BoxDecoration(
@@ -140,12 +153,18 @@ class DocumentScreen extends StatelessWidget {
                     ],
                   ),
                 padding: EdgeInsets.fromLTRB(DimensionConstants.d30.w,  DimensionConstants.d32.h,  DimensionConstants.d30.w,  DimensionConstants.d32.h),
-                child:  Text("choose_a_document".tr()).regularText(ColorConstants.colorBlackDown, DimensionConstants.d15.sp, TextAlign.left)
+                child:  Text(provider.filePath == "" || provider.filePath == null ? "choose_a_document".tr() : provider.filePath.toString()).regularText(ColorConstants.colorBlackDown, DimensionConstants.d15.sp, TextAlign.left)
               ),
             ),
           ),
           SizedBox(width: DimensionConstants.d10.w),
-          Icon(Icons.close, size: DimensionConstants.d32),
+          GestureDetector(
+            onTap: (){
+              provider.filePath = "";
+              provider.file = null;
+              provider.updatePickFile(true);
+            },
+              child: Icon(Icons.close, size: DimensionConstants.d32)),
         ],
       ),
     );

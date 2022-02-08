@@ -14,6 +14,8 @@ import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/decoration.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
 import 'package:snap_app/constants/route_constants.dart';
+import 'package:snap_app/constants/validations.dart';
+import 'package:snap_app/extensions/all_extensions.dart';
 import 'package:snap_app/helper/common_widgets.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 import 'package:snap_app/helper/dialog_helper.dart';
@@ -55,7 +57,7 @@ class VoiceScreen extends StatelessWidget {
                 _mPlayerIsInited = true;
                 provider.updateRecord(true);
               });
-              openTheRecorder().then((value) {
+              openTheRecorder(context).then((value) {
                 _mRecorderIsInited = true;
                 provider.updateRecord(true);
               });
@@ -88,36 +90,32 @@ class VoiceScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(
-                                height: 40,
+                                height: DimensionConstants.d40.h,
                               ),
                               Container(
                                 child: Center(
-                                  child: Text(
-                                    _timerText,
-                                    style: TextStyle(
-                                        fontSize: 50, color: Colors.red),
-                                  ),
+                                  child: Text(_timerText).regularText(ColorConstants.colorRed, DimensionConstants.d46.sp, TextAlign.center),
                                 ),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              SizedBox(height: DimensionConstants.d20.h),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  CommonWidgets.createElevatedButton(
+                                  CommonWidgets.recordStopBtn(
                                     icon: Icons.mic,
-                                    iconColor: Colors.red,
-                                    onPressFunc:  _mRecorder!.isStopped ? record : (){
+                                    iconColor: ColorConstants.colorRed,
+                                    onPressFunc:  _mRecorder!.isStopped ? (){
+                                      record(context);
+                                    } : (){
                                       DialogHelper.showMessage(context, "Recording in going on");
                                     },
                                   ),
                                   SizedBox(
                                     width: 30,
                                   ),
-                                  CommonWidgets.createElevatedButton(
+                                  CommonWidgets.recordStopBtn(
                                     icon: Icons.stop,
-                                    iconColor: Colors.red,
+                                    iconColor: ColorConstants.colorRed,
                                     onPressFunc: _mRecorder!.isStopped ? (){
                                       //DialogHelper.showMessage(context, "Recording stop");
                                     } : stopRecorder,
@@ -159,7 +157,9 @@ class VoiceScreen extends StatelessWidget {
                               SizedBox(height: DimensionConstants.d21.h),
                               GestureDetector(
                                 onTap: () {
-                                  //    Navigator.pushNamed(context, RouteConstants.otpVerify);
+                                  if(_formKey.currentState!.validate()){
+
+                                  }
                                 },
                                 child: CommonWidgets.commonBtn(
                                     context,
@@ -181,29 +181,26 @@ class VoiceScreen extends StatelessWidget {
   }
 
   Widget emailTextField() {
-    return SizedBox(
-      height: DimensionConstants.d63.h,
-      child: TextFormField(
-        controller: emailController,
-        style: ViewDecoration.textFieldStyle(
-            DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
-        decoration: ViewDecoration.inputDecorationForEmailTextField(
-            "email_address".tr(),
-            EdgeInsets.fromLTRB(DimensionConstants.d23.w,
-                DimensionConstants.d26.h, 0.0, DimensionConstants.d19.h)),
-        textInputAction: TextInputAction.done,
-        keyboardType: TextInputType.emailAddress,
-        validator: (value) {
-          // if (value!.trim().isEmpty) {
-          //   return "email_required".tr();
-          // } else if (!Validations.emailValidation(
-          //     value.trim())) {
-          //   return "invalid_email".tr();
-          // } else {
-          //   return null;
-          // }
-        },
-      ),
+    return TextFormField(
+      controller: emailController,
+      style: ViewDecoration.textFieldStyle(
+          DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
+      decoration: ViewDecoration.inputDecorationForEmailTextField(
+          "email_address".tr(),
+          EdgeInsets.fromLTRB(DimensionConstants.d23.w,
+              DimensionConstants.d26.h, 0.0, DimensionConstants.d19.h)),
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.trim().isEmpty) {
+          return "email_required".tr();
+        } else if (!Validations.emailValidation(
+            value.trim())) {
+          return "invalid_email".tr();
+        } else {
+          return null;
+        }
+      },
     );
   }
 
@@ -227,11 +224,14 @@ class VoiceScreen extends StatelessWidget {
     await initializeDateFormatting();
   }
 
-  Future<void> openTheRecorder() async {
+  Future<void> openTheRecorder(BuildContext context) async {
     if (!kIsWeb) {
       var status = await Permission.microphone.request();
-      if (status != PermissionStatus.granted) {
-        throw RecordingPermissionException('Microphone permission not granted');
+      // if (status != PermissionStatus.granted) {
+      //   throw RecordingPermissionException('Microphone permission not granted');
+      // } else
+        if(status == PermissionStatus.permanentlyDenied){
+        CommonWidgets.permissionErrorDialog(context, "microphone_permission".tr(), "microphone_permission_not_granted".tr());
       }
     }
     await _mRecorder!.openRecorder();
@@ -266,25 +266,30 @@ class VoiceScreen extends StatelessWidget {
     _mRecorderIsInited = true;
   }
 
-  void record() {
-   _mRecorder!
-        .startRecorder(
-      toFile: _mPath,
-      codec: _codec,
-      audioSource: theSource,
-    ).then((value) {
-      voiceProvider.updateRecord(true);
-    });
-   _recorderSubscription = _mRecorder!.onProgress!.listen((e) {
-     var date = DateTime.fromMillisecondsSinceEpoch(
-         e.duration.inMilliseconds,
-         isUtc: true);
-     var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
+  Future<void> record(BuildContext context) async {
+    var status = await Permission.microphone.request();
+    if(status != PermissionStatus.granted){
+      DialogHelper.showMessage(context, "microphone_permission_not_granted".tr());
+    } else{
+      _mRecorder!
+          .startRecorder(
+        toFile: _mPath,
+        codec: _codec,
+        audioSource: theSource,
+      ).then((value) {
+        voiceProvider.updateRecord(true);
+      });
+      _recorderSubscription = _mRecorder!.onProgress!.listen((e) {
+        var date = DateTime.fromMillisecondsSinceEpoch(
+            e.duration.inMilliseconds,
+            isUtc: true);
+        var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
 
         _timerText = txt.substring(0, 8);
         voiceProvider.updateRecord(true);
-    });
-   // _recorderSubscription!.cancel();
+      });
+      // _recorderSubscription!.cancel();
+    }
   }
 
   void cancelRecorderSubscriptions() {
@@ -326,7 +331,7 @@ class VoiceScreen extends StatelessWidget {
     });
   }
 
-  getRecorderFn() {
+  getRecorderFn(BuildContext context)  {
     if (!_mRecorderIsInited || !_mPlayer!.isStopped) {
       return null;
     }
@@ -340,7 +345,7 @@ class VoiceScreen extends StatelessWidget {
     return _mPlayer!.isStopped ? play : stopPlayer;
   }
 
-  Widget makeBody() {
+  Widget makeBody(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -358,7 +363,7 @@ class VoiceScreen extends StatelessWidget {
           ),
           child: Row(children: [
             ElevatedButton(
-              onPressed: getRecorderFn(),
+              onPressed: getRecorderFn(context),
               //color: Colors.white,
               //disabledColor: Colors.grey,
               child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),

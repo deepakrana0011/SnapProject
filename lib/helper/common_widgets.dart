@@ -112,29 +112,46 @@ class CommonWidgets{
     return 'good_evening_snap'.tr();
   }
 
- static ElevatedButton createElevatedButton(
-      {required IconData icon, required Color iconColor, required VoidCallback onPressFunc}) {
-    return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.all(6.0),
-        side: BorderSide(
-          color: Colors.red,
-          width: 4.0,
+  static recordStopBtn({required IconData icon, required Color iconColor, required VoidCallback onPressFunc}){
+    return GestureDetector(
+      onTap: onPressFunc,
+      child: Container(
+        padding: EdgeInsets.all(DimensionConstants.d6),
+        decoration: BoxDecoration(
+          color: ColorConstants.colorWhite,
+          boxShadow: [
+            BoxShadow(color: ColorConstants.colorRed, spreadRadius: 2),
+          ],
+            borderRadius: BorderRadius.circular(DimensionConstants.d20.r),
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+        child: Icon(
+          icon,
+          color: iconColor,
+          size: 38.0,
         ),
-        primary: Colors.white,
-        elevation: 9.0,
       ),
-      onPressed: onPressFunc,
-      icon: Icon(
-        icon,
-        color: iconColor,
-        size: 38.0,
-      ),
-      label: Text(''),
     );
   }
 
+  static permissionErrorDialog(BuildContext context, String title, String content){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: Text(title).semiBoldText(ColorConstants.colorBlackDown, DimensionConstants.d16.sp, TextAlign.center),
+          content: Text(content).regularText(ColorConstants.colorBlackDown, DimensionConstants.d12.sp, TextAlign.center),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('Deny'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            CupertinoDialogAction(
+              child: Text('Settings'),
+              onPressed: (){
+                Navigator.of(context).pop();
+                openAppSettings();
+              }
+            ),
+          ],
+        ));
+  }
 }
