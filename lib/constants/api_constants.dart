@@ -6,5 +6,5 @@ class ApiConstants{
   static const verifyOtp = "verifytoken";
   static const resendOtp = "resendToken";
   static const sendNote = "senddata";
-  static const sendPhotoAndDocument = "uploads";
+  static const sendData = "uploads";
 }

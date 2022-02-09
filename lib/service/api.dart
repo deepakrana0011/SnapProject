@@ -114,7 +114,7 @@ class Api{
       }
       dio.options.headers["authorization"] = token;
       var response =
-      await dio.post(ApiConstants.baseUrl + ApiConstants.sendPhotoAndDocument, data: FormData.fromMap(map));
+      await dio.post(ApiConstants.baseUrl + ApiConstants.sendData, data: FormData.fromMap(map));
       return SuccessResponse.fromJson(json.decode(response.toString()));
     } on DioError catch (e) {
       if (e.response != null) {
@@ -139,7 +139,32 @@ class Api{
       }
       dio.options.headers["authorization"] = token;
       var response =
-      await dio.post(ApiConstants.baseUrl + ApiConstants.sendPhotoAndDocument, data: FormData.fromMap(map));
+      await dio.post(ApiConstants.baseUrl + ApiConstants.sendData, data: FormData.fromMap(map));
+      return SuccessResponse.fromJson(json.decode(response.toString()));
+    } on DioError catch (e) {
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        var errorMessage = errorData["error"];
+        throw FetchDataException(errorMessage);
+      } else {
+        throw const SocketException("");
+      }
+    }
+  }
+
+  Future<SuccessResponse> sendRecording(String token, String email, File? recordingFile) async{
+    try {
+      var map = <String, dynamic>{"email": email};
+      if (recordingFile != null) {
+        var recording = MultipartFile.fromFileSync(recordingFile.path.toString(), filename: "snapRecording.mp4");
+        var recordingMap = {
+          'image': recording,
+        };
+        map.addAll(recordingMap);
+      }
+      dio.options.headers["authorization"] = token;
+      var response =
+      await dio.post(ApiConstants.baseUrl + ApiConstants.sendData, data: FormData.fromMap(map));
       return SuccessResponse.fromJson(json.decode(response.toString()));
     } on DioError catch (e) {
       if (e.response != null) {

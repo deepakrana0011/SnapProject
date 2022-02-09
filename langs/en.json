@@ -43,5 +43,7 @@
   "microphone_permission" : "Microphone permission",
   "storage_permission_not_granted" : "This app needs storage access to choose document to send, Please click again on storage permission whether already given",
   "storage_permission" : "Storage Permission",
-  "email" : "Email"
+  "email" : "Email",
+  "recording_send_successfully" : "Your recording has send Successfully.",
+  "no_recording_found" : "No recording found, please record some sound to send."
 }

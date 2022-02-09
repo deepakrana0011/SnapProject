@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -15,6 +17,7 @@ import 'package:snap_app/constants/decoration.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
 import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/constants/validations.dart';
+import 'package:snap_app/enum/view_state.dart';
 import 'package:snap_app/extensions/all_extensions.dart';
 import 'package:snap_app/helper/common_widgets.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
@@ -23,6 +26,7 @@ import 'package:snap_app/locator.dart';
 import 'package:snap_app/provider/voice_provider.dart';
 import 'package:snap_app/view/base_view.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:path/path.dart' as path;
 
 class VoiceScreen extends StatelessWidget {
   VoiceScreen({Key? key}) : super(key: key);
@@ -155,9 +159,23 @@ class VoiceScreen extends StatelessWidget {
                             children: [
                               emailTextField(),
                               SizedBox(height: DimensionConstants.d21.h),
-                              GestureDetector(
-                                onTap: () {
+                              provider.state == ViewState.busy
+                                  ? const CircularProgressIndicator()
+                                  : GestureDetector(
+                                onTap: () async {
                                   if(_formKey.currentState!.validate()){
+                                    if(_mRecorder!.isStopped){
+                                      try{
+                                        var recording = await _mRecorder!.getRecordURL(path: _mPath);
+                                        provider.sendRecording(context, emailController.text, File(recording.toString())).then((value) {
+                                          emailController.clear();
+                                        });
+                                      } catch(err){
+                                        DialogHelper.showMessage(context, "something_went_wrong".tr());
+                                      }
+                                    } else{
+                                      DialogHelper.showMessage(context, "Recording in going on");
+                                    }
 
                                   }
                                 },
@@ -289,6 +307,7 @@ class VoiceScreen extends StatelessWidget {
         voiceProvider.updateRecord(true);
       });
       // _recorderSubscription!.cancel();
+  //    await voiceProvider.writeFileToStorage1(_mPath);
     }
   }
 
