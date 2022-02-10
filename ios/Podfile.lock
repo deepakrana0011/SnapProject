@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   flutter_sound_core: b31694f619cd74a09744a7e392f5a50e7004c6ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
-  image_picker: 0d37d1cb66231c2473a0e3ccb8d062d0c2b3d297
+  image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   SDWebImage: 53179a2dba77246efa8a9b85f5c5b21f8f43e38f
@@ -128,6 +128,6 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
 
-PODFILE CHECKSUM: 3dffd8c48b531d21ec0ec153c22dc8e3a6223bc9
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
 COCOAPODS: 1.11.2

@@ -6,4 +6,6 @@ class ImageConstants{
   static const emailIcon = "images/ic_email.png";
   static const imageIcon = "images/ic_image.png";
   static const microphoneIcon = "images/ic_microphone.png";
+  static const timeIcon = "images/ic_time.svg";
+  static const dateIcon = "images/ic_date.svg";
 }

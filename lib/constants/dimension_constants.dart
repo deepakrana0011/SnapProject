@@ -1,7 +1,9 @@
 class DimensionConstants{
+  static const double d2 = 2;
   static const double d4 = 4;
   static const double d6 = 6;
   static const double d8 = 8;
+  static const double d9 = 9;
   static const double d10 = 10;
   static const double d11 = 11;
   static const double d12 = 12;

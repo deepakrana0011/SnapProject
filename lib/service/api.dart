@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:snap_app/constants/api_constants.dart';
 import 'package:snap_app/locator.dart';
 import 'package:http/http.dart' as http;
+import 'package:snap_app/models/history_response.dart';
 import 'package:snap_app/models/login_response.dart';
 import 'package:snap_app/models/register_response.dart';
 import 'package:snap_app/models/success_response.dart';
@@ -166,6 +167,23 @@ class Api{
       var response =
       await dio.post(ApiConstants.baseUrl + ApiConstants.sendData, data: FormData.fromMap(map));
       return SuccessResponse.fromJson(json.decode(response.toString()));
+    } on DioError catch (e) {
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        var errorMessage = errorData["error"];
+        throw FetchDataException(errorMessage);
+      } else {
+        throw const SocketException("");
+      }
+    }
+  }
+
+  Future<HistoryResponse> history(String token) async{
+    try {
+      dio.options.headers["authorization"] = token;
+      var response =
+      await dio.get(ApiConstants.baseUrl + ApiConstants.findData);
+      return HistoryResponse.fromJson(json.decode(response.toString()));
     } on DioError catch (e) {
       if (e.response != null) {
         var errorData = jsonDecode(e.response.toString());

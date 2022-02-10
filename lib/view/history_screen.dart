@@ -29,6 +29,7 @@ class HistoryScreen extends StatelessWidget {
         appBar: CommonWidgets.appBar(context, "history".tr()),
         body: BaseView<HistoryProvider>(
           onModelReady: (provider)  {
+            provider.history(context);
           },
           builder: (context, provider, _) {
             return Container(
@@ -45,10 +46,8 @@ class HistoryScreen extends StatelessWidget {
               ),
               child: SingleChildScrollView(
                 child: Column(
-                  //  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // SizedBox(height: DimensionConstants.d73.h),
                     historyScreenCard(ImageConstants.emailIcon, "email".tr()),
                     historyScreenCard(ImageConstants.microphoneIcon, "voice".tr()),
                     historyScreenCard(ImageConstants.imageIcon, "photo".tr())
@@ -83,7 +82,28 @@ class HistoryScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(width: DimensionConstants.d13.w),
-              Text(title).mediumText(ColorConstants.colorBlackDown, DimensionConstants.d16.sp, TextAlign.center)
+              Text(title).mediumText(ColorConstants.colorBlackDown, DimensionConstants.d16.sp, TextAlign.center),
+              SizedBox(width: DimensionConstants.d64.w),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      ImageView(path: ImageConstants.dateIcon),
+                      SizedBox(width: DimensionConstants.d8.w),
+                      Text("12-01-2022").mediumText(ColorConstants.colorGrayDown, DimensionConstants.d12.sp, TextAlign.center)
+                    ],
+                  ),
+                  SizedBox(height: DimensionConstants.d6.h),
+                  Row(
+                    children: [
+                      SizedBox(width: DimensionConstants.d12.w),
+                      ImageView(path: ImageConstants.timeIcon),
+                      SizedBox(width: DimensionConstants.d4.w),
+                      Text("10:30 PM").mediumText(ColorConstants.colorGrayDown, DimensionConstants.d12.sp, TextAlign.center)
+                    ],
+                  )
+                ],
+              )
             ],
           ),
         ),
