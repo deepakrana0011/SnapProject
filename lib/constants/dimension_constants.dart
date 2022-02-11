@@ -47,6 +47,7 @@ class DimensionConstants{
   static const double d102 = 102;
   static const double d117 = 117;
   static const double d126 = 126;
+  static const double d150 = 150;
   static const double d160 = 160;
   static const double d163 = 163;
   static const double d179 = 179;

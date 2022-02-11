@@ -15,18 +15,16 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/decoration.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
-import 'package:snap_app/constants/route_constants.dart';
 import 'package:snap_app/constants/validations.dart';
 import 'package:snap_app/enum/view_state.dart';
 import 'package:snap_app/extensions/all_extensions.dart';
 import 'package:snap_app/helper/common_widgets.dart';
-import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 import 'package:snap_app/helper/dialog_helper.dart';
 import 'package:snap_app/locator.dart';
 import 'package:snap_app/provider/voice_provider.dart';
 import 'package:snap_app/view/base_view.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:path/path.dart' as path;
+import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 
 class VoiceScreen extends StatelessWidget {
   VoiceScreen({Key? key}) : super(key: key);
@@ -88,71 +86,85 @@ class VoiceScreen extends StatelessWidget {
                       children: [
                         // SizedBox(height: DimensionConstants.d73.h),
                         CommonWidgets.goodMorningText(),
-                       // makeBody(),
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: DimensionConstants.d40.h,
+                         SizedBox(height: DimensionConstants.d20.h),
+                        Stack(
+                          children: [
+                            Container(
+                              color: Colors.black,
+                              height: DimensionConstants.d300.h,
+                              width: double.infinity,
+                              child: Image.asset(
+                                "images/audio.gif",
+                                height: DimensionConstants.d150.h,
                               ),
-                              Container(
-                                child: Center(
-                                  child: Text(_timerText).regularText(ColorConstants.colorRed, DimensionConstants.d46.sp, TextAlign.center),
-                                ),
-                              ),
-                              SizedBox(height: DimensionConstants.d20.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  CommonWidgets.recordStopBtn(
-                                    icon: Icons.mic,
-                                    iconColor: ColorConstants.colorRed,
-                                    onPressFunc:  _mRecorder!.isStopped ? (){
-                                      record(context);
-                                    } : (){
-                                      DialogHelper.showMessage(context, "Recording in going on");
-                                    },
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  CommonWidgets.recordStopBtn(
-                                    icon: Icons.stop,
-                                    iconColor: ColorConstants.colorRed,
-                                    onPressFunc: _mRecorder!.isStopped ? (){
-                                      //DialogHelper.showMessage(context, "Recording stop");
-                                    } : stopRecorder,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                    elevation: 9.0, primary: Colors.red),
-                                onPressed: getPlaybackFn(),
-                                icon:  Icon(
-                                  _mPlayer!.isPlaying
-                                      ? Icons.stop : Icons.play_arrow
-                                ),
-                                label: Text(
-                                  _mPlayer!.isPlaying
-                                      ? "Stop" :  "Play",
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                        ),
-                                      )
-                              ),
+                            ),
+                           Positioned(child: Center(
+                             child: Column(
+                               mainAxisAlignment: MainAxisAlignment.start,
+                               children: <Widget>[
+                                 SizedBox(
+                                   height: DimensionConstants.d40.h,
+                                 ),
+                                 Container(
+                                   child: Center(
+                                     child: Text(_timerText).regularText(ColorConstants.colorWhite, DimensionConstants.d44.sp, TextAlign.center),
+                                   ),
+                                 ),
+                                 SizedBox(height: DimensionConstants.d20.h),
+                                 Row(
+                                   mainAxisAlignment: MainAxisAlignment.center,
+                                   children: <Widget>[
+                                     CommonWidgets.recordStopBtn(
+                                       icon: Icons.mic,
+                                       iconColor: ColorConstants.colorBlack,
+                                       onPressFunc:  _mRecorder!.isStopped ? (){
+                                         record(context);
+                                       } : (){
+                                         DialogHelper.showMessage(context, "Recording in going on");
+                                       },
+                                     ),
+                                     SizedBox(
+                                       width: 30,
+                                     ),
+                                     CommonWidgets.recordStopBtn(
+                                       icon: Icons.stop,
+                                       iconColor: ColorConstants.colorBlack,
+                                       onPressFunc: _mRecorder!.isStopped ? (){
+                                         //DialogHelper.showMessage(context, "Recording stop");
+                                       } : stopRecorder,
+                                     ),
+                                   ],
+                                 ),
+                                 SizedBox(
+                                   height: 20,
+                                 ),
+                                 ElevatedButton.icon(
+                                     style: ElevatedButton.styleFrom(
+                                         elevation: 9.0, primary: ColorConstants.colorWhite),
+                                     onPressed: getPlaybackFn(),
+                                     icon:  Icon(
+                                         _mPlayer!.isPlaying
+                                             ? Icons.stop : Icons.play_arrow
+                                     ),
+                                     label: Text(
+                                       _mPlayer!.isPlaying
+                                           ? "Stop" :  "Play",
+                                       style: TextStyle(
+                                         fontSize: 28,
+                                       ),
+                                     )
+                                 ),
 
-                            ],
-                          ),
+                               ],
+                             ),
+                           ),)
+                          ],
                         ),
+
                         Padding(
                           padding: EdgeInsets.fromLTRB(
                               DimensionConstants.d20.w,
-                              DimensionConstants.d55.h,
+                              DimensionConstants.d30.h,
                               DimensionConstants.d20.w,
                               0.0),
                           child: Column(
@@ -176,7 +188,6 @@ class VoiceScreen extends StatelessWidget {
                                     } else{
                                       DialogHelper.showMessage(context, "Recording in going on");
                                     }
-
                                   }
                                 },
                                 child: CommonWidgets.commonBtn(
@@ -364,66 +375,4 @@ class VoiceScreen extends StatelessWidget {
     return _mPlayer!.isStopped ? play : stopPlayer;
   }
 
-  Widget makeBody(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
-          height: 80,
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Color(0xFFFAF0E6),
-            border: Border.all(
-              color: Colors.indigo,
-              width: 3,
-            ),
-          ),
-          child: Row(children: [
-            ElevatedButton(
-              onPressed: getRecorderFn(context),
-              //color: Colors.white,
-              //disabledColor: Colors.grey,
-              child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(_mRecorder!.isRecording
-                ? 'Recording in progress'
-                : 'Recorder is stopped'),
-          ]),
-        ),
-        Container(
-          margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
-          height: 80,
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Color(0xFFFAF0E6),
-            border: Border.all(
-              color: Colors.indigo,
-              width: 3,
-            ),
-          ),
-          child: Row(children: [
-            ElevatedButton(
-              onPressed: getPlaybackFn(),
-              //color: Colors.white,
-              //disabledColor: Colors.grey,
-              child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(_mPlayer!.isPlaying
-                ? 'Playback in progress'
-                : 'Player is stopped'),
-          ]),
-        ),
-      ],
-    );
-  }
 }

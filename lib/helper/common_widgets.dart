@@ -115,19 +115,18 @@ class CommonWidgets{
   static recordStopBtn({required IconData icon, required Color iconColor, required VoidCallback onPressFunc}){
     return GestureDetector(
       onTap: onPressFunc,
-      child: Container(
-        padding: EdgeInsets.all(DimensionConstants.d6),
-        decoration: BoxDecoration(
-          color: ColorConstants.colorWhite,
-          boxShadow: [
-            BoxShadow(color: ColorConstants.colorRed, spreadRadius: 2),
-          ],
-            borderRadius: BorderRadius.circular(DimensionConstants.d20.r),
+      child: Card(
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DimensionConstants.d40.sp),
         ),
-        child: Icon(
-          icon,
-          color: iconColor,
-          size: 38.0,
+        child: Container(
+          padding: EdgeInsets.all(DimensionConstants.d6),
+          child: Icon(
+            icon,
+            color: iconColor,
+            size: 38.0,
+          ),
         ),
       ),
     );

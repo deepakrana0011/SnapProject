@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
 import 'package:snap_app/constants/image_constants.dart';
+import 'package:snap_app/enum/view_state.dart';
 import 'package:snap_app/extensions/all_extensions.dart';
 import 'package:snap_app/helper/common_widgets.dart';
 import 'package:snap_app/provider/history_provider.dart';
@@ -44,13 +46,28 @@ class HistoryScreen extends StatelessWidget {
                   topLeft: Radius.circular(DimensionConstants.d44.r),
                 ),
               ),
-              child: SingleChildScrollView(
+              child: provider.state == ViewState.busy ? Center(child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: DimensionConstants.d4.h),
+                  Text("loading_history".tr()).regularText(ColorConstants.primaryColor, DimensionConstants.d15.sp, TextAlign.center),
+                ],
+              )) :
+              SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    historyScreenCard(ImageConstants.emailIcon, "email".tr()),
-                    historyScreenCard(ImageConstants.microphoneIcon, "voice".tr()),
-                    historyScreenCard(ImageConstants.imageIcon, "photo".tr())
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                        itemCount: provider.historyData.length,
+                        itemBuilder: (context, index){
+                          var dateTime = DateFormat("yyyy-MM-ddTHH:mm:ss").parse(provider.historyData[index].createdAt.toString(), true);
+                          var dateLocal = dateTime.toLocal();
+                          var timeLocal =  DateFormat('hh:mm a').format(dateTime.toLocal());
+                      return historyScreenCard(provider.historyCardIcon(int.parse(provider.historyData[index].type.toString())), provider.historyCardName(int.parse(provider.historyData[index].type.toString())), "${dateLocal.day <= 9 ? "0" + dateLocal.day.toString() : dateLocal.day }-${dateLocal.month <= 9 ? "0" + dateLocal.month.toString() : dateLocal.month }-${dateLocal.year}", timeLocal);
+                    })
                   ]
               ),
               ),);
@@ -58,7 +75,7 @@ class HistoryScreen extends StatelessWidget {
         ));
   }
 
-  Widget historyScreenCard(String imageIcon, String title){
+  Widget historyScreenCard(String imageIcon, String title, String date, String time){
     return Padding(
       padding: EdgeInsets.fromLTRB(DimensionConstants.d20.w, 0.0, DimensionConstants.d20.w, DimensionConstants.d19.h),
       child: Card(
@@ -82,15 +99,20 @@ class HistoryScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(width: DimensionConstants.d13.w),
-              Text(title).mediumText(ColorConstants.colorBlackDown, DimensionConstants.d16.sp, TextAlign.center),
-              SizedBox(width: DimensionConstants.d64.w),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(title).mediumText(ColorConstants.colorBlackDown, DimensionConstants.d16.sp, TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
+                )
+              ),
+              SizedBox(width: DimensionConstants.d4.w),
               Column(
                 children: [
                   Row(
                     children: [
                       ImageView(path: ImageConstants.dateIcon),
                       SizedBox(width: DimensionConstants.d8.w),
-                      Text("12-01-2022").mediumText(ColorConstants.colorGrayDown, DimensionConstants.d12.sp, TextAlign.center)
+                      Text(date).mediumText(ColorConstants.colorGrayDown, DimensionConstants.d12.sp, TextAlign.center)
                     ],
                   ),
                   SizedBox(height: DimensionConstants.d6.h),
@@ -99,7 +121,7 @@ class HistoryScreen extends StatelessWidget {
                       SizedBox(width: DimensionConstants.d12.w),
                       ImageView(path: ImageConstants.timeIcon),
                       SizedBox(width: DimensionConstants.d4.w),
-                      Text("10:30 PM").mediumText(ColorConstants.colorGrayDown, DimensionConstants.d12.sp, TextAlign.center)
+                      Text(time).mediumText(ColorConstants.colorGrayDown, DimensionConstants.d12.sp, TextAlign.center)
                     ],
                   )
                 ],
