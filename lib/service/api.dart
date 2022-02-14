@@ -85,10 +85,10 @@ class Api{
     }
   }
 
-  Future<SuccessResponse> sendNote(String email, String description, String token) async{
+  Future<SuccessResponse> sendNote(String email, String description) async{
     try {
       var map = {"email": email, "description" : description, "type" : 1};
-      dio.options.headers["authorization"] = token;
+//      dio.options.headers["authorization"] = token;
       var response =
       await dio.post(ApiConstants.baseUrl + ApiConstants.sendNote, data: map);
       return SuccessResponse.fromJson(json.decode(response.toString()));
@@ -103,7 +103,7 @@ class Api{
     }
   }
 
-  Future<SuccessResponse> sendPhoto(String token, String email, File imageFile) async{
+  Future<SuccessResponse> sendPhoto(String email, File imageFile) async{
     try {
       var map = <String, dynamic>{"email": email, "type" : 2};
       if (imageFile != null) {
@@ -113,7 +113,7 @@ class Api{
         };
         map.addAll(imageMap);
       }
-      dio.options.headers["authorization"] = token;
+    //  dio.options.headers["authorization"] = token;
       var response =
       await dio.post(ApiConstants.baseUrl + ApiConstants.sendData, data: FormData.fromMap(map));
       return SuccessResponse.fromJson(json.decode(response.toString()));
@@ -128,7 +128,7 @@ class Api{
     }
   }
 
-  Future<SuccessResponse> sendDocument(String token, String email, PlatformFile? documentFile) async{
+  Future<SuccessResponse> sendDocument(String email, PlatformFile? documentFile) async{
     try {
       var map = <String, dynamic>{"email": email, "type" : 3};
       if (documentFile != null) {
@@ -138,7 +138,7 @@ class Api{
         };
         map.addAll(documentMap);
       }
-      dio.options.headers["authorization"] = token;
+   //   dio.options.headers["authorization"] = token;
       var response =
       await dio.post(ApiConstants.baseUrl + ApiConstants.sendData, data: FormData.fromMap(map));
       return SuccessResponse.fromJson(json.decode(response.toString()));
@@ -153,7 +153,7 @@ class Api{
     }
   }
 
-  Future<SuccessResponse> sendRecording(String token, String email, File? recordingFile) async{
+  Future<SuccessResponse> sendRecording(String email, File? recordingFile) async{
     try {
       var map = <String, dynamic>{"email": email, "type" : 4};
       if (recordingFile != null) {
@@ -163,7 +163,7 @@ class Api{
         };
         map.addAll(recordingMap);
       }
-      dio.options.headers["authorization"] = token;
+    //  dio.options.headers["authorization"] = token;
       var response =
       await dio.post(ApiConstants.baseUrl + ApiConstants.sendData, data: FormData.fromMap(map));
       return SuccessResponse.fromJson(json.decode(response.toString()));

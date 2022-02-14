@@ -8,7 +8,8 @@ import 'package:snap_app/service/fetch_data_exception.dart';
 import 'dart:io';
 
 class PhotoScreenProvider extends BaseProvider{
-  final token = SharedPref.prefs?.getString(SharedPref.token) ?? '';
+  final email = SharedPref.prefs?.getString(SharedPref.userEmail) ?? '';
+//  final token = SharedPref.prefs?.getString(SharedPref.token) ?? '';
 
    Color pickerColor = const Color(0xff443a49);
    Color currentColor = const Color(0xff443a49);
@@ -36,7 +37,7 @@ class PhotoScreenProvider extends BaseProvider{
        BuildContext context, String email, File imageFile) async {
      setState(ViewState.busy);
      try {
-       var model =  await api.sendPhoto(token, email, imageFile);
+       var model =  await api.sendPhoto(email, imageFile);
 
        if(model.success == true){
          Navigator.of(context).pop(true);

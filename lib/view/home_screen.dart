@@ -30,9 +30,10 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: ColorConstants.backgroundColor,
-      appBar: CommonWidgets.appBar(context, "home".tr(), suffix: true, suffixImgPath: ImageConstants.homeRefresh, prefix: true, suffixTap: (){
-        Navigator.pushNamed(context, RouteConstants.historyScreen);
-      }),
+      // appBar: CommonWidgets.appBar(context, "home".tr(), suffix: true, suffixImgPath: ImageConstants.homeRefresh, prefix: true, suffixTap: (){
+      //   Navigator.pushNamed(context, RouteConstants.historyScreen);
+      // }),
+        appBar: CommonWidgets.appBar(context, "home".tr(), prefix: true),
       body: BaseView<HomeProvider>(
         builder: (context, provider, _){
           return  Container(
@@ -60,7 +61,11 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                               onTap: (){
-                                Navigator.pushNamed(context, RouteConstants.noteScreen);
+                                Navigator.pushNamed(context, RouteConstants.noteScreen).then((value) {
+                                  if(value == true){
+                                    DialogHelper.showMessage(context, "hey_snap".tr());
+                                  }
+                                });
                               },
                               child: cardView("note".tr(), ColorConstants.primaryColor,DimensionConstants.d22.h, DimensionConstants.d72.w)),
                           SizedBox(width: DimensionConstants.d15.w),
@@ -96,13 +101,21 @@ class HomeScreen extends StatelessWidget {
                           GestureDetector(
                             onTap: (){
                             //  DialogHelper.showMessage(context, "OOPS, Under Development!");
-                              Navigator.pushNamed(context, RouteConstants.documentScreen);
+                              Navigator.pushNamed(context, RouteConstants.documentScreen).then((value) {
+                                if(value == true){
+                                  DialogHelper.showMessage(context, "document_send_successfully".tr());
+                                }
+                              });
                             },
                               child: cardView("document".tr(), ColorConstants.colorGreenDown, DimensionConstants.d32.h, DimensionConstants.d73.w)),
                           SizedBox(width: DimensionConstants.d15.w),
                           GestureDetector(
                               onTap: (){
-                                Navigator.pushNamed(context, RouteConstants.voiceScreen);
+                                Navigator.pushNamed(context, RouteConstants.voiceScreen).then((value) {
+                                  if(value == true){
+                                    DialogHelper.showMessage(context, "recording_send_successfully".tr());
+                                  }
+                                });
                               },
                               child: cardView("voice".tr(), ColorConstants.colorRedDown, DimensionConstants.d32.h, DimensionConstants.d74.w))
                         ],

@@ -70,6 +70,7 @@ class PhotoScreen extends StatelessWidget {
           body: BaseView<PhotoScreenProvider>(
             onModelReady: (provider){
               this.provider = provider;
+              emailController.text = provider.email;
             },
             builder: (context, provider, _) {
               return Form(
@@ -182,7 +183,7 @@ class PhotoScreen extends StatelessWidget {
                                  if(_formKey.currentState!.validate()){
                                  var imageFile =  await _takeScreenShot(context);
                                    provider.sendPhoto(context, emailController.text, imageFile).then((value) {
-                                     emailController.clear();
+                                   //  emailController.clear();
                                    });
                                  }
                                 },
@@ -209,6 +210,7 @@ class PhotoScreen extends StatelessWidget {
     return SizedBox(
     //  height: DimensionConstants.d63.h,
       child: TextFormField(
+        readOnly: true,
         controller: emailController,
         style: ViewDecoration.textFieldStyle(
             DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
@@ -309,7 +311,7 @@ colorPickerAlert(BuildContext context){
             ElevatedButton(
               child: const Text('Got it'),
               onPressed: () {
-                imageTextController.clear();
+               // imageTextController.clear();
                 provider.currentColor = provider.pickerColor;
                 provider.updateColor(true);
                 Navigator.of(context).pop();

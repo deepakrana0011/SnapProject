@@ -37,6 +37,7 @@ class NoteScreen extends StatelessWidget {
         appBar: CommonWidgets.appBar(context, "note".tr()),
         body: BaseView<NoteProvider>(
           onModelReady: (provider){
+            emailController.text = provider.email;
           },
           builder: (context, provider, _){
             return Form(
@@ -75,7 +76,7 @@ class NoteScreen extends StatelessWidget {
                                 if(_formKey.currentState!.validate()){
                                   provider.sendNote(context, emailController.text, descriptionController.text).then((value) {
                                     if(value){
-                                      emailController.clear();
+                                    //  emailController.clear();
                                       descriptionController.clear();
                                     }
                                   });
@@ -101,6 +102,7 @@ class NoteScreen extends StatelessWidget {
      return SizedBox(
       // height: DimensionConstants.d63.h,
        child: TextFormField(
+         readOnly: true,
          controller: emailController,
          style: ViewDecoration.textFieldStyle(
              DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),

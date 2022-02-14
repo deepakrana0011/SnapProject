@@ -18,7 +18,8 @@ class DocumentProvider extends BaseProvider{
   FilePickerResult? result;
   PlatformFile? file;
   String? filePath;
-  final token = SharedPref.prefs?.getString(SharedPref.token) ?? '';
+  final email = SharedPref.prefs?.getString(SharedPref.userEmail) ?? '';
+ // final token = SharedPref.prefs?.getString(SharedPref.token) ?? '';
 
   bool pickFile = false;
 
@@ -59,10 +60,11 @@ class DocumentProvider extends BaseProvider{
       BuildContext context, String email, PlatformFile? documentFile) async {
     setState(ViewState.busy);
     try {
-      var model =  await api.sendDocument(token, email, documentFile);
+      var model =  await api.sendDocument(email, documentFile);
 
       if(model.success == true){
-        DialogHelper.showMessage(context, "document_send_successfully".tr());
+        Navigator.of(context).pop(true);
+    //  DialogHelper.showMessage(context, "document_send_successfully".tr());
       } else{
         DialogHelper.showMessage(context, "something_went_wrong".tr());
       }

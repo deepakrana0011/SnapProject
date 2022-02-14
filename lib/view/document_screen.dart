@@ -37,6 +37,7 @@ class DocumentScreen extends StatelessWidget {
           appBar: CommonWidgets.appBar(context, "document".tr()),
           body: BaseView<DocumentProvider>(
             onModelReady: (provider)  {
+              emailController.text = provider.email;
             },
             builder: (context, provider, _) {
               return Form(
@@ -81,7 +82,7 @@ class DocumentScreen extends StatelessWidget {
                                       DialogHelper.showMessage(context, "file_size_exceeds".tr());
                                     } else{
                                       provider.sendDocument(context, emailController.text, provider.file).then((value) {
-                                        emailController.clear();
+                                     //   emailController.clear();
                                         provider.filePath = "";
                                         provider.file = null;
                                         provider.updatePickFile(true);
@@ -110,6 +111,7 @@ class DocumentScreen extends StatelessWidget {
 
    Widget emailTextField() {
      return TextFormField(
+       readOnly: true,
        controller: emailController,
        style: ViewDecoration.textFieldStyle(
            DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),

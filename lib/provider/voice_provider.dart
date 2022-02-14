@@ -12,7 +12,8 @@ import 'package:snap_app/provider/base_provider.dart';
 import 'package:snap_app/service/fetch_data_exception.dart';
 
 class VoiceProvider extends BaseProvider{
-  final token = SharedPref.prefs?.getString(SharedPref.token) ?? '';
+  final email = SharedPref.prefs?.getString(SharedPref.userEmail) ?? '';
+//  final token = SharedPref.prefs?.getString(SharedPref.token) ?? '';
 
   bool record = false;
 
@@ -25,10 +26,11 @@ class VoiceProvider extends BaseProvider{
       BuildContext context, String email, File recording) async {
     setState(ViewState.busy);
     try {
-      var model =  await api.sendRecording(token, email, recording);
+      var model =  await api.sendRecording(email, recording);
 
       if(model.success == true){
-        DialogHelper.showMessage(context, "recording_send_successfully".tr());
+        Navigator.of(context).pop(true);
+      //  DialogHelper.showMessage(context, "recording_send_successfully".tr());
       } else{
         DialogHelper.showMessage(context, "something_went_wrong".tr());
       }

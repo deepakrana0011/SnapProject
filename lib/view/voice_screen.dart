@@ -54,6 +54,7 @@ class VoiceScreen extends StatelessWidget {
           appBar: CommonWidgets.appBar(context, "voice".tr()),
           body: BaseView<VoiceProvider>(
             onModelReady: (provider)  {
+              emailController.text = provider.email;
               voiceProvider = provider;
               _mPlayer!.openPlayer().then((value) {
                 _mPlayerIsInited = true;
@@ -180,7 +181,7 @@ class VoiceScreen extends StatelessWidget {
                                       try{
                                         var recording = await _mRecorder!.getRecordURL(path: _mPath);
                                         provider.sendRecording(context, emailController.text, File(recording.toString())).then((value) {
-                                          emailController.clear();
+                                        //  emailController.clear();
                                         });
                                       } catch(err){
                                         DialogHelper.showMessage(context, "something_went_wrong".tr());
@@ -211,6 +212,7 @@ class VoiceScreen extends StatelessWidget {
 
   Widget emailTextField() {
     return TextFormField(
+      readOnly: true,
       controller: emailController,
       style: ViewDecoration.textFieldStyle(
           DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
