@@ -19,14 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: Size(375, 812),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+        ScreenUtil.init(context, designSize: const Size(375, 812));
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: ColorConstants.backgroundColor,
@@ -71,8 +64,8 @@ class HomeScreen extends StatelessWidget {
                           SizedBox(width: DimensionConstants.d15.w),
                           GestureDetector(
                               onTap: () async {
-                                var value = await provider.permissionCheck();
-                                if(value){
+                               // var value = await provider.permissionCheck();
+                              //  if(value){
                                 showDialog(
                                     barrierDismissible: false,
                                     context: context,
@@ -90,7 +83,7 @@ class HomeScreen extends StatelessWidget {
                                             Navigator.of(context).pop();
                                           },
                                         ));
-                                 }
+                              //   }
                               },
                               child: cardView("photo".tr(), ColorConstants.colorYellowDown,DimensionConstants.d22.h, DimensionConstants.d72.w))
                         ],
@@ -100,7 +93,6 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: (){
-                            //  DialogHelper.showMessage(context, "OOPS, Under Development!");
                               Navigator.pushNamed(context, RouteConstants.documentScreen).then((value) {
                                 if(value == true){
                                   DialogHelper.showMessage(context, "document_send_successfully".tr());

@@ -18,14 +18,7 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: Size(375, 812),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
+    ScreenUtil.init(context, designSize: const Size(375, 812));
     return Dialog(
       backgroundColor: Colors.transparent,
       child: CustomShape(

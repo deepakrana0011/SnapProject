@@ -12,6 +12,7 @@ import 'router.dart' as router;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await ScreenUtil.ensureScreenSize();
   SharedPref.prefs = await SharedPreferences.getInstance();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
