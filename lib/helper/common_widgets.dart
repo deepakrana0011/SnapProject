@@ -62,7 +62,10 @@ class CommonWidgets{
             SizedBox(width: DimensionConstants.d20.w),
             suffix == true ? GestureDetector(
               onTap: suffixTap,
-                child: ImageView(path: suffixImgPath)) : Container(),
+              //  child: ImageView(path: suffixImgPath)
+              child: suffixImgPath == null ? Icon(Icons.settings, color: ColorConstants.colorBlackDown) : ImageView(path: suffixImgPath),
+            )
+                : Container(),
             SizedBox(width: DimensionConstants.d20.w),
           ],
         )
@@ -153,4 +156,23 @@ class CommonWidgets{
           ],
         ));
   }
+
+  static fileName(){
+    int day = DateTime.now().day;
+    int month = DateTime.now().month;
+    int year = DateTime.now().year;
+    int hour = DateTime.now().hour;
+    int minute = DateTime.now().minute;
+    int second = DateTime.now().second;
+
+    if(day<=9 && month > 9){
+      return "0${day}/${month}/${year}/${hour}/${minute}/${second}";
+    } else if(day > 9 && month <= 9){
+      return "${day}/0${month}/${year}/${hour}/${minute}/${second}";
+    } else if(day <= 9 && month <= 9){
+      return "0${day}/0${month}/${year}/${hour}/${minute}/${second}";
+    } else{
+      return "${day}/${month}/${year}/${hour}/${minute}/${second}";
+    }
+   }
 }

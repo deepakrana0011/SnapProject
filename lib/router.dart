@@ -9,6 +9,7 @@ import 'package:snap_app/view/login_page.dart';
 import 'package:snap_app/view/note_screen.dart';
 import 'package:snap_app/view/otp_verify_page.dart';
 import 'package:snap_app/view/photo_screen.dart';
+import 'package:snap_app/view/settings_screen.dart';
 import 'package:snap_app/view/signup_page.dart';
 import 'package:snap_app/view/voice_screen.dart';
 
@@ -52,6 +53,10 @@ class OnGenerateRouter {
       case RouteConstants.historyScreen:
         return MaterialPageRoute(
             builder: (_) => HistoryScreen(), settings: settings);
+
+      case RouteConstants.settingsScreen:
+        return MaterialPageRoute(
+            builder: (_) => Settings(), settings: settings);
 
 
       default:

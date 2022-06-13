@@ -79,7 +79,7 @@ class VoiceScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // SizedBox(height: DimensionConstants.d73.h),
-                        CommonWidgets.goodMorningText(),
+                       // CommonWidgets.goodMorningText(),
                          SizedBox(height: DimensionConstants.d20.h),
                         Stack(
                           children: [
@@ -163,10 +163,10 @@ class VoiceScreen extends StatelessWidget {
                               0.0),
                           child: Column(
                             children: [
-                              emailTextField(),
-                              SizedBox(height: DimensionConstants.d21.h),
+                              // emailTextField(),
+                              // SizedBox(height: DimensionConstants.d21.h),
                               provider.state == ViewState.busy
-                                  ? const CircularProgressIndicator()
+                                  ? Center(child: const CircularProgressIndicator())
                                   : GestureDetector(
                                 onTap: () async {
                                   if(_formKey.currentState!.validate()){

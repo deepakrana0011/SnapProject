@@ -53,13 +53,13 @@ class NoteScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // SizedBox(height: DimensionConstants.d73.h),
-                      CommonWidgets.goodMorningText(),
+                     // CommonWidgets.goodMorningText(),
                       Padding(
                         padding: EdgeInsets.fromLTRB(DimensionConstants.d20.w, DimensionConstants.d55.h, DimensionConstants.d20.w, 0.0),
                         child: Column(
                           children: [
-                            emailTextField(),
-                            SizedBox(height: DimensionConstants.d20.h),
+                          //  emailTextField(),
+                          //  SizedBox(height: DimensionConstants.d20.h),
                             descriptionTextField(),
                             SizedBox(height: DimensionConstants.d38.h),
                             provider.state == ViewState.busy

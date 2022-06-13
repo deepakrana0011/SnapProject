@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart';
 import 'package:snap_app/constants/api_constants.dart';
+import 'package:snap_app/helper/common_widgets.dart';
 import 'package:snap_app/locator.dart';
 import 'package:http/http.dart' as http;
 import 'package:snap_app/models/history_response.dart';
@@ -107,7 +110,7 @@ class Api{
     try {
       var map = <String, dynamic>{"email": email, "type" : 2};
       if (imageFile != null) {
-        var image = MultipartFile.fromFileSync(imageFile.path, filename: "snap.png");
+        var image = MultipartFile.fromFileSync(imageFile.path, filename: "${CommonWidgets.fileName()}.png");
         var imageMap = {
           'image': image,
         };
@@ -128,11 +131,11 @@ class Api{
     }
   }
 
-  Future<SuccessResponse> sendDocument(String email, PlatformFile? documentFile) async{
+  Future<SuccessResponse> sendDocument(String email, File documentFile) async{
     try {
       var map = <String, dynamic>{"email": email, "type" : 3};
       if (documentFile != null) {
-        var document = MultipartFile.fromFileSync(documentFile.path.toString(), filename: "snapDocument.${documentFile.extension}");
+        var document = MultipartFile.fromFileSync(documentFile.path.toString(), filename: "${CommonWidgets.fileName()}.pdf");
         var documentMap = {
           'image': document,
         };
@@ -157,7 +160,7 @@ class Api{
     try {
       var map = <String, dynamic>{"email": email, "type" : 4};
       if (recordingFile != null) {
-        var recording = MultipartFile.fromFileSync(recordingFile.path.toString(), filename: "snapRecording.mp4");
+        var recording = MultipartFile.fromFileSync(recordingFile.path.toString(), filename: "${CommonWidgets.fileName()}.mp4");
         var recordingMap = {
           'image': recording,
         };

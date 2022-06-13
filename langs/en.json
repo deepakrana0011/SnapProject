@@ -46,5 +46,8 @@
   "email" : "Email",
   "recording_send_successfully" : "Hey Snap! Your recording has send Successfully.",
   "no_recording_found" : "No recording found, please record some sound to send.",
-  "loading_history" : "Loading History...."
+  "loading_history" : "Loading History....",
+  "update_email" : "Update Email",
+  "update" : "Update",
+  "please_select_document" : "Please select document first!"
 }

@@ -137,6 +137,7 @@ class PhotoScreen extends StatelessWidget {
                                         height: DimensionConstants.d200.h,
                                         child: Center(
                                           child: TextField(
+                                            textCapitalization: TextCapitalization.sentences,
                                             cursorColor: provider.currentColor,
                                             textInputAction:
                                                 TextInputAction.done,
@@ -166,17 +167,18 @@ class PhotoScreen extends StatelessWidget {
                               0.0),
                           child: Column(
                             children: [
-                              emailTextField(),
-                              SizedBox(height: DimensionConstants.d20.h),
+                              // emailTextField(),
+                               SizedBox(height: DimensionConstants.d20.h),
                               provider.state == ViewState.busy
-                                  ? const CircularProgressIndicator()
+                                  ? Center(child: const CircularProgressIndicator())
                                   : GestureDetector(
                                 onTap: () async {
                                   CommonWidgets.hideKeyboard(context);
                                  if(_formKey.currentState!.validate()){
-                                 var imageFile =  await _takeScreenShot(context);
-                                   provider.sendPhoto(context, emailController.text, imageFile).then((value) {
+                                   File imageFile =  await _takeScreenShot(context);
+                                   provider.sendPhoto(context, emailController.text, imageFile).then((value) async {
                                    //  emailController.clear();
+                                   await imageFile.delete();
                                    });
                                  }
                                 },

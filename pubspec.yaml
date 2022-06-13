@@ -53,8 +53,9 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_app_name: ^0.1.0
   file_picker: ^4.3.3
-  flutter_sound: ^9.1.2
+  flutter_sound: ^9.2.13
   flutter_launcher_icons: ^0.9.2
+  pdf: ^3.8.1
 
 flutter_icons:
   android: true

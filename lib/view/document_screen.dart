@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,7 +53,7 @@ class DocumentScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CommonWidgets.goodMorningText(),
+                       // CommonWidgets.goodMorningText(),
                         pickFile(context, provider),
                           SizedBox(height: DimensionConstants.d40.h),
                         Padding(
@@ -62,26 +64,32 @@ class DocumentScreen extends StatelessWidget {
                               0.0),
                           child: Column(
                             children: [
-                              emailTextField(),
-                              SizedBox(height: DimensionConstants.d21.h),
+                              // emailTextField(),
+                              // SizedBox(height: DimensionConstants.d21.h),
                               provider.state == ViewState.busy
-                                  ? const CircularProgressIndicator()
+                                  ? Center(child: const CircularProgressIndicator())
                                   : GestureDetector(
-                                onTap: () {
-                                  if(_formKey.currentState!.validate()){
-                                    final kb = provider.file!.size / 1024;
-                                    final mb = kb / 1024;
-                                    if(mb > 20){
-                                      DialogHelper.showMessage(context, "file_size_exceeds".tr());
-                                    } else{
-                                      provider.sendDocument(context, emailController.text, provider.file).then((value) {
-                                     //   emailController.clear();
-                                        provider.filePath = "";
-                                        provider.file = null;
-                                        provider.updatePickFile(true);
-                                      });
-                                    }
+                                onTap: () async {
+                                 // if(_formKey.currentState!.validate()){
+                                 //    final kb = provider.file!.size / 1024;
+                                 //    final mb = kb / 1024;
+                                 //    if(mb > 20){
+                                 //      DialogHelper.showMessage(context, "file_size_exceeds".tr());
+                                 //    } else{
+                                 //    }
+                                 //  }
+                                  if(provider.pdfFile != null){
+                                    provider.sendDocument(context, emailController.text, provider.pdfFile!).then((value) {
+                                      //   emailController.clear();
+                                      //    provider.filePath = "";
+                                      //    provider.file = null;
+                                      provider.pdfFile!.delete();
+                                      provider.updatePickFile(true);
+                                    });
+                                  } else{
+                                    DialogHelper.showMessage(context, "please_select_document".tr());
                                   }
+
                                 },
                                 child: CommonWidgets.commonBtn(
                                     context,
@@ -137,7 +145,8 @@ class DocumentScreen extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: (){
-                provider.pickAFile(context);
+              //  provider.pickAFile(context);
+                provider.getFileFromCamera(context);
               },
               child: Container(
                   decoration: BoxDecoration(
@@ -148,15 +157,16 @@ class DocumentScreen extends StatelessWidget {
                     ],
                   ),
                 padding: EdgeInsets.fromLTRB(DimensionConstants.d30.w,  DimensionConstants.d32.h,  DimensionConstants.d30.w,  DimensionConstants.d32.h),
-                child:  Text(provider.filePath == "" || provider.filePath == null ? "choose_a_document".tr() : provider.filePath.toString()).regularText(ColorConstants.colorBlackDown, DimensionConstants.d15.sp, TextAlign.left)
+                child:  Text(provider.pdfFile == "" || provider.pdfFile == null ? "choose_a_document".tr() : "${CommonWidgets.fileName()}.pdf").regularText(ColorConstants.colorBlackDown, DimensionConstants.d15.sp, TextAlign.left)
               ),
             ),
           ),
           SizedBox(width: DimensionConstants.d10.w),
           GestureDetector(
             onTap: (){
-              provider.filePath = "";
-              provider.file = null;
+              // provider.filePath = "";
+              // provider.file = null;
+              provider.pdfFile = null;
               provider.updatePickFile(true);
             },
               child: Icon(Icons.close, size: DimensionConstants.d32)),

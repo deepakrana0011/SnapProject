@@ -26,7 +26,9 @@ class HomeScreen extends StatelessWidget {
       // appBar: CommonWidgets.appBar(context, "home".tr(), suffix: true, suffixImgPath: ImageConstants.homeRefresh, prefix: true, suffixTap: (){
       //   Navigator.pushNamed(context, RouteConstants.historyScreen);
       // }),
-        appBar: CommonWidgets.appBar(context, "home".tr(), prefix: true),
+        appBar: CommonWidgets.appBar(context, "home".tr(), prefix: true, suffix: true, suffixTap: (){
+          Navigator.pushNamed(context, RouteConstants.settingsScreen);
+        }),
       body: BaseView<HomeProvider>(
         builder: (context, provider, _){
           return  Container(
