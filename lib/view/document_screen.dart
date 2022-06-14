@@ -28,7 +28,6 @@ class DocumentScreen extends StatelessWidget {
         CommonWidgets.hideKeyboard(context);
       },
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
           backgroundColor: ColorConstants.backgroundColor,
           appBar: CommonWidgets.appBar(context, "document".tr()),
           body: BaseView<DocumentProvider>(
@@ -54,7 +53,6 @@ class DocumentScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                       // CommonWidgets.goodMorningText(),
                         pickFile(context, provider),
                           SizedBox(height: DimensionConstants.d40.h),
                         Padding(
@@ -65,25 +63,12 @@ class DocumentScreen extends StatelessWidget {
                               0.0),
                           child: Column(
                             children: [
-                              // emailTextField(),
-                              // SizedBox(height: DimensionConstants.d21.h),
                               provider.state == ViewState.busy
                                   ? Center(child: const CircularProgressIndicator())
                                   : GestureDetector(
                                 onTap: () async {
-                                 // if(_formKey.currentState!.validate()){
-                                 //    final kb = provider.file!.size / 1024;
-                                 //    final mb = kb / 1024;
-                                 //    if(mb > 20){
-                                 //      DialogHelper.showMessage(context, "file_size_exceeds".tr());
-                                 //    } else{
-                                 //    }
-                                 //  }
                                   if(provider.pdfFile != null){
                                     provider.sendDocument(context, emailController.text, provider.pdfFile!).then((value) {
-                                      //   emailController.clear();
-                                      //    provider.filePath = "";
-                                      //    provider.file = null;
                                       provider.pdfFile!.delete();
                                       provider.updatePickFile(true);
                                     });
@@ -146,7 +131,6 @@ class DocumentScreen extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () async {
-              //  provider.pickAFile(context);
                 var status = await Permission.camera.status;
                 if (await Permission.camera.request().isGranted) {
                   provider.getFileFromCamera(context);
@@ -178,8 +162,6 @@ class DocumentScreen extends StatelessWidget {
           SizedBox(width: DimensionConstants.d10.w),
           GestureDetector(
             onTap: (){
-              // provider.filePath = "";
-              // provider.file = null;
               provider.pdfFile = null;
               provider.updatePickFile(true);
             },

@@ -25,7 +25,6 @@ class NoteScreen extends StatelessWidget {
         CommonWidgets.hideKeyboard(context);
       },
       child: Scaffold(
-       // resizeToAvoidBottomInset: false,
         backgroundColor: ColorConstants.backgroundColor,
         appBar: CommonWidgets.appBar(context, "note".tr()),
         body: BaseView<NoteProvider>(
@@ -49,10 +48,8 @@ class NoteScreen extends StatelessWidget {
                 ),
                 child: SingleChildScrollView(
                   child: Column(
-                    //  mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // SizedBox(height: DimensionConstants.d73.h),
                      // CommonWidgets.goodMorningText(),
                       Padding(
                         padding: EdgeInsets.fromLTRB(DimensionConstants.d20.w, DimensionConstants.d55.h, DimensionConstants.d20.w, 0.0),
@@ -92,28 +89,25 @@ class NoteScreen extends StatelessWidget {
   }
 
    Widget emailTextField(){
-     return SizedBox(
-      // height: DimensionConstants.d63.h,
-       child: TextFormField(
-         readOnly: true,
-         controller: emailController,
-         style: ViewDecoration.textFieldStyle(
-             DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
-         decoration: ViewDecoration.inputDecorationForEmailTextField(
-             "email_address".tr(),  EdgeInsets.fromLTRB(DimensionConstants.d23.w, DimensionConstants.d26.h, 0.0, DimensionConstants.d19.h)),
-         textInputAction: TextInputAction.done,
-         keyboardType: TextInputType.emailAddress,
-         validator: (value) {
-           if (value!.trim().isEmpty) {
-             return "email_required".tr();
-           } else if (!Validations.emailValidation(
-               value.trim())) {
-             return "invalid_email".tr();
-           } else {
-             return null;
-           }
-         },
-       ),
+     return TextFormField(
+       readOnly: true,
+       controller: emailController,
+       style: ViewDecoration.textFieldStyle(
+           DimensionConstants.d12, FontWeight.w400, ColorConstants.colorBlack),
+       decoration: ViewDecoration.inputDecorationForEmailTextField(
+           "email_address".tr(),  EdgeInsets.fromLTRB(DimensionConstants.d23.w, DimensionConstants.d26.h, 0.0, DimensionConstants.d19.h)),
+       textInputAction: TextInputAction.done,
+       keyboardType: TextInputType.emailAddress,
+       validator: (value) {
+         if (value!.trim().isEmpty) {
+           return "email_required".tr();
+         } else if (!Validations.emailValidation(
+             value.trim())) {
+           return "invalid_email".tr();
+         } else {
+           return null;
+         }
+       },
      );
    }
 
