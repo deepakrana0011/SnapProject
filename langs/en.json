@@ -41,7 +41,7 @@
   "document_send_successfully" : "Hey Snap! Your document has send Successfully.",
   "microphone_permission_not_granted" : "Microphone permission not granted, please enable it to record audio.",
   "microphone_permission" : "Microphone permission",
-  "storage_permission_not_granted" : "This app needs storage access to choose document to send, Please click again on storage permission whether already given",
+  "storage_permission_not_granted" : "Snap needs storage access to choose document to send, please enable it to create or send document.",
   "storage_permission" : "Storage Permission",
   "email" : "Email",
   "recording_send_successfully" : "Hey Snap! Your recording has send Successfully.",
@@ -49,5 +49,9 @@
   "loading_history" : "Loading History....",
   "update_email" : "Update Email",
   "update" : "Update",
-  "please_select_document" : "Please select document first!"
+  "please_select_document" : "Please select document first!",
+  "camera_permission" : "Camera Permission",
+  "camera_permission_not_granted" : "Camera permission not granted, please enable it to create or send document.",
+  "media_permission" : "Media Permission",
+  "media_permission_not_granted" : "Media permission not granted, please enable it to create or send document."
 }

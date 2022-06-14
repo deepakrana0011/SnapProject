@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/decoration.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
@@ -144,9 +145,22 @@ class DocumentScreen extends StatelessWidget {
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: (){
+              onTap: () async {
               //  provider.pickAFile(context);
-                provider.getFileFromCamera(context);
+                var status = await Permission.camera.status;
+                if (await Permission.camera.request().isGranted) {
+                  provider.getFileFromCamera(context);
+                } else if (status.isDenied) {
+                  await Permission.camera.request();
+                  if(status.isDenied){
+                    CommonWidgets.permissionErrorDialog(context, "camera_permission".tr(), "camera_permission_not_granted".tr());
+                  }
+                } else if (await status.isPermanentlyDenied) {
+                  // The user opted to never again see the permission request dialog for this
+                  // app. The only way to change the permission's status now is to let the
+                  // user manually enable it in the system settings.
+                  CommonWidgets.permissionErrorDialog(context, "camera_permission".tr(), "camera_permission_not_granted".tr());
+                }
               },
               child: Container(
                   decoration: BoxDecoration(

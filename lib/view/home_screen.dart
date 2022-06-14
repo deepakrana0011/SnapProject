@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:snap_app/constants/color_constants.dart';
 import 'package:snap_app/constants/dimension_constants.dart';
 import 'package:snap_app/constants/image_constants.dart';
@@ -68,23 +71,59 @@ class HomeScreen extends StatelessWidget {
                               onTap: () async {
                                // var value = await provider.permissionCheck();
                               //  if(value){
-                                showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        CustomDialog(
-                                          cameraClick: () {
-                                            provider.getImage(
-                                                _scaffoldKey.currentContext!, 1);
-                                          },
-                                          galleryClick: () {
-                                            provider.getImage(
-                                                _scaffoldKey.currentContext!, 2);
-                                          },
-                                          cancelClick: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ));
+                                var status = await Permission.storage.status;
+                                if (await Permission.storage.request().isGranted) {
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          CustomDialog(
+                                            cameraClick: () async {
+                                              var status = await Permission.camera.status;
+                                              if (await Permission.camera.request().isGranted) {
+                                                provider.getImage(_scaffoldKey.currentContext!, 1);
+                                              } else if (status.isDenied) {
+                                                await Permission.camera.request();
+                                                if(status.isDenied){
+                                                  CommonWidgets.permissionErrorDialog(context, "camera_permission".tr(), "camera_permission_not_granted".tr());
+                                                }
+                                              } else if (await status.isPermanentlyDenied) {
+                                                CommonWidgets.permissionErrorDialog(context, "camera_permission".tr(), "camera_permission_not_granted".tr());
+                                              }
+                                            },
+                                            galleryClick: () async {
+                                              if(Platform.isIOS){
+                                                var status = await Permission.photos.status;
+                                                if (await Permission.photos.request().isGranted) {
+                                              provider.getImage(_scaffoldKey.currentContext!, 2);
+                                              } else if (status.isDenied) {
+                                              await Permission.photos.request();
+                                              if(status.isDenied){
+                                              CommonWidgets.permissionErrorDialog(context, "media_permission".tr(), "media_permission_not_granted".tr());
+                                              }
+                                              } else if (await status.isPermanentlyDenied) {
+                                              CommonWidgets.permissionErrorDialog(context, "media_permission".tr(), "media_permission_not_granted".tr());
+                                              }
+                                              } else{
+                                                provider.getImage(
+                                                    _scaffoldKey.currentContext!, 2);
+                                              }
+                                            },
+                                            cancelClick: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ));
+                                } else if (status.isDenied) {
+                                  await Permission.storage.request();
+                                  if(status.isDenied){
+                                    CommonWidgets.permissionErrorDialog(context, "storage_permission".tr(), "storage_permission_not_granted".tr());
+                                  }
+                                } else if (await status.isPermanentlyDenied) {
+                                  // The user opted to never again see the permission request dialog for this
+                                  // app. The only way to change the permission's status now is to let the
+                                  // user manually enable it in the system settings.
+                                  CommonWidgets.permissionErrorDialog(context, "storage_permission".tr(), "storage_permission_not_granted".tr());
+                                }
                               //   }
                               },
                               child: cardView("photo".tr(), ColorConstants.colorYellowDown,DimensionConstants.d22.h, DimensionConstants.d72.w))
